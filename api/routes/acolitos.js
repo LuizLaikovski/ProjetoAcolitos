@@ -6,7 +6,6 @@ const router = express.Router();
 router.get('/', getAcolitos);
 router.get('/names', getNameAcolitos);
 router.get('/idade/:idadeMinima', getAcolitosByIdadeMinima);    // idade/18
-router.get('/:id', getAcolitos);
 router.get('/sexo/:sexo', getAcolitosBySexo);
 router.get('/acolitosDisponivelMissa/:idMissa', getAcolitosByMissaDisponivel);
 router.delete('/delete/:id', deleteAcolito);
