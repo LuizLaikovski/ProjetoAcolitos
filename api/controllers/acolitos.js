@@ -1,7 +1,7 @@
 import e from 'express';
 import { db } from '../db.js';
 
-export const getAcolitos = (res) => {
+export const getAcolitos = (req, res) => {
     const query = 'SELECT * FROM dataAcolitos';
 
     db.query(query, (err, data) => {
@@ -24,7 +24,7 @@ export const getAcolitos = (res) => {
     });
 };
 
-export const getAcolitosByIdade = (res) =>{
+export const getAcolitosByIdade = (req, res) =>{
     const query = 'SELECT nome, dataNascimento FROM dataAcolitos;'
 
     db.query(query, (err, data) => {
@@ -42,7 +42,7 @@ export const getAcolitosByIdade = (res) =>{
     });
 };
 
-export const getNameAcolitos = (res) => {
+export const getNameAcolitos = (req, res) => {
     const query = 'SELECT nome FROM dataAcolitos';
 
     db.query(query, (err, data) => {
