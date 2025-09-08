@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./components/Card";
 import Header from "./components/Header"
+import Form from "./components/Form";
 
 interface AcolitoProp {
     id: number;
@@ -22,7 +23,7 @@ function App() {
 
   useEffect(() => {
     const fetchAcolito = async () => {
-      const response = await fetch('http://localhost:8800/');
+      const response = await fetch('http://localhost:8800');
       const data = await response.json();
       setAcolito(data);
     }
@@ -34,6 +35,7 @@ function App() {
     <>
     <Header />
     <div className="bg-gray-200 flex justify-center items-center flex-col">
+      <Form />
       <div className="w-[80dvw] h-auto grid grid-cols-3 gap-8 mt-8">
         {acolito.map((acolito) => (
           <Card 

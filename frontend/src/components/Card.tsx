@@ -1,5 +1,5 @@
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faCalendarDays, faChurch, faClose, faLocationDot, faPencil, faTrashAlt, faTShirt } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faLocationDot, faPencil, faTrashAlt, faTShirt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
@@ -50,16 +50,18 @@ const Card = ({ id, nome, sexo, dataNascimento, idade, telefone, tamTunica, comu
                     </p>
 
                     {/* Só aparece se for cerimonialista */}
-                    {cerimonialista && (
-                        <p className="px-3 py-1 font-bold text-green-900 rounded-xl bg-green-400">Cerimonialista</p>
-                    )}
+                    {cerimonialista ? (
+                        <p className="px-3 py-1 font-bold text-green-900 rounded-xl bg-green-400">
+                            Cerimonialista
+                        </p>
+                    ) : null}
                 </div>
 
                 
                 <ul className="mt-4">
-                    <li className="m-3 text-[14px]"><a className="text-green-500" href={`https://wa.me/${telefone}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faWhatsapp} color="green" size="2xl" className="mr-3" />{telefone}</a> ;</li>
-                    <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faLocationDot} size="2xl" className="mr-3" /> Comunidades: {comunidades.join(", ")} ;</li>
-                    <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faTShirt} size="2xl" className="mr-3" /> Túnica: {tamTunica} ;</li>
+                    <li className="m-3 text-[14px]"><a className="text-green-500" href={`https://wa.me/${telefone}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faWhatsapp} color="green" size="2xl" className="mr-3" />{telefone}</a></li>
+                    <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faLocationDot} size="2xl" className="mr-3" /> Comunidades: {comunidades.join(", ")}</li>
+                    <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faTShirt} size="2xl" className="mr-3" /> Túnica: {tamTunica}</li>
 
                     <h2 className="m-3">Disponibilidade: </h2>
                     <div className="grid grid-cols-3">
@@ -125,7 +127,7 @@ const Card = ({ id, nome, sexo, dataNascimento, idade, telefone, tamTunica, comu
                     <button onClick={ShowModalTrash} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
                         <FontAwesomeIcon icon={faClose} />
                     </button>
-                    <div className="text-white">
+                    <div className="text-black">
                         <h2 className="text-xl font-bold mb-4">Título do Modal</h2>
                         <p>Aqui vai o conteúdo do modal.</p>
                     </div>

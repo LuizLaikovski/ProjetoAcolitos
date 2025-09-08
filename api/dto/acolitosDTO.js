@@ -1,3 +1,6 @@
+import { db } from "../db.js";
+
+
 export const calIdade = (anoNascimento) => {
     return new Date().getFullYear() - new Date(anoNascimento).getFullYear();
 }
@@ -39,4 +42,32 @@ export function calcularDataMaximaPorIdade(idadeMinima) {
 
     const anoAtual = new Date().getFullYear();
     return `${anoAtual - idadeMinima}-12-31`;
+}
+
+export function insertComunidades(idAcolito, comunidades) {
+    if (Array.isArray(comunidades) && comunidades.length > 0) {
+        const values = comunidades.map(c => [idAcolito, c]);
+        db.query("INSERT INTO acolitos_comunidades (idAcolito, idComunidade) VALUES ?", [values]);
+    }
+}
+
+export function insertMissas(idAcolito, missas) {
+    if (Array.isArray(missas) && missas.length > 0) {
+        const values = missas.map(m => [idAcolito, m]);
+        db.query("INSERT INTO acolitos_missas (idAcolito, idMissa) VALUES ?", [values]);
+    }
+}
+
+export function updateRelacionamentos(idAcolito, comunidades, missas) {
+    if (Array.isArray(comunidades)) {
+        db.query("DELETE FROM acolitos_comunidades WHERE idAcolito = ?", [idAcolito], () => {
+            insertComunidades(idAcolito, comunidades);
+        });
+    }
+
+    if (Array.isArray(missas)) {
+        db.query("DELETE FROM acolitos_missas WHERE idAcolito = ?", [idAcolito], () => {
+            insertMissas(idAcolito, missas);
+        });
+    }
 }
