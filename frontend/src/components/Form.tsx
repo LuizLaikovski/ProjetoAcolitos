@@ -4,7 +4,6 @@ import React, { useState } from "react";
 
 const Form = () => {
     const [formDataSearch, setFormDataSearch] = useState({
-        name: '',
         age: '',
         sexo: '',
         missas: '',
@@ -71,15 +70,37 @@ const Form = () => {
         });
     };
 
-
-
-
-
-
-
-    const handleSubmitSearch = (e: React.FormEvent) => {
+    const handleSubmitSearch = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(formDataSearch);
+        
+        try {
+            e.preventDefault();
+
+            const dataSearch = {
+                age: formDataSearch.age,
+                sexo: formDataSearch.sexo,
+                missas: formDataSearch.missas,
+                comunidade: formDataSearch.comunidade
+            }
+
+            const response  = await fetch(`http://localhost:8800/idade/${dataSearch.age}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataSearch),
+            })
+
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.status);
+            }
+
+            const data = response.json();
+            console.log("Acolito pesquisado: ", data);
+            
+        } catch (error) {
+            console.error('Erro ao procurar acolito:', error);
+        }
     };
 
     const handleSubmitNew = async (e: React.FormEvent) => {
@@ -123,6 +144,11 @@ const Form = () => {
         }
     }
 
+    const button = document.getElementById("submitNew");
+        button?.addEventListener("click", function() {
+        location.reload();
+    })
+
     return (
         <>
             <form onSubmit={handleSubmitSearch} className="w-[75dvw] h-auto bg-white rounded-2xl p-6 shadow-lg mt-10 mb-10 flex flex-col items-center">
@@ -130,17 +156,7 @@ const Form = () => {
                     <h1 className="text-3xl font-bold">Busca de Acolitos:</h1>
                     <button onClick={openModalNew} className="p-3 border-1 rounded-xl w-full xl:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">Adicionar Novo Acólito/Ancilia</button>
                 </div>
-                <div className="grid grid-cols-6 gap-4 w-full mt-6">
-                    <div>
-                        <label htmlFor="name" className="text-green-400">Nome:</label>
-                        <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formDataSearch.name}
-                        onChange={handleChange}
-                        className="border-green-400 bg-green-100 border-2 rounded-md p-2 w-full" />
-                    </div>
+                <div className="grid grid-cols-5 gap-4 w-full mt-6">
                     <div>
                         <label htmlFor="age" className="text-blue-400">Idade:</label>
                         <input
@@ -201,11 +217,15 @@ const Form = () => {
                     </div>
                     <div>
                         <label htmlFor="submit" className="invisible">Submit</label>
-                        <button id="submit" type="submit" className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">Buscar</button>
+                        <button
+                        id="submit"
+                        type="submit"
+                        className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">
+                            Buscar
+                        </button>
                     </div>
                 </div>
             </form>
-
 
 
             {modalOpenNew && (
@@ -251,7 +271,6 @@ const Form = () => {
                                         <option value="" disabled selected>Selecione</option>
                                         <option value="MAS">Masculino</option>
                                         <option value="FEM">Feminino</option>
-                                        <option value="outro">Outro</option>
                                     </select>
                                 </div>
                                 <div className="flex flex-col">
@@ -388,7 +407,7 @@ const Form = () => {
                             className="border-2 w-full h-[100px] text-green-500 rounded-b-2xl border-green-300 p-1.5" />
                             <div>
                                 <label htmlFor="submitNew" className="invisible">Submit</label>
-                                <button id="submitNew" type="submit" className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">Buscar</button>
+                                <button id="submitNew" type="submit" className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">Adicionar</button>
                             </div>
                         </form>
                     </div>

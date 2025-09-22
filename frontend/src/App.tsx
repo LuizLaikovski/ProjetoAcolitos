@@ -3,7 +3,7 @@ import Card from "./components/Card";
 import Header from "./components/Header"
 import Form from "./components/Form";
 
-interface AcolitoProp {
+export interface AcolitoProp {
     id: number;
     nome: string;
     sexo: string;
@@ -33,7 +33,6 @@ function App() {
 
   return (
     <>
-    <Header />
     <div className="bg-gray-200 flex justify-center items-center flex-col">
       <Form />
       <div className="w-[80dvw] h-auto grid grid-cols-3 gap-8 mt-8">
