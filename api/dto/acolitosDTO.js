@@ -5,14 +5,31 @@ export const calIdade = (anoNascimento) => {
     return new Date().getFullYear() - new Date(anoNascimento).getFullYear();
 }
 
-export const parseJsonArray = (jsonString) => {
+export const parseJsonArray = (value) => {
     try {
-        return jsonString ? [...new Set(JSON.parse(jsonString))] : [];
-    } catch {
-        console.error("Erro ao parsear JSON:", jsonString);
+        if (!value) return [];
+
+        // Se já for array (caso vindo de algum outro parser)
+        if (Array.isArray(value)) return [...new Set(value)];
+
+        // Tenta parsear como JSON
+        if (typeof value === "string" && value.trim().startsWith("[")) {
+            return [...new Set(JSON.parse(value))];
+        }
+
+        // Se for string comum com vírgula → divide
+        if (typeof value === "string") {
+            return [...new Set(value.split(",").map(v => v.trim()))];
+        }
+
+        // Caso não caia em nenhum
+        return [];
+    } catch (e) {
+        console.error("Erro ao parsear valor:", value, e);
         return [];
     }
 };
+
 
 export const mapAcolito = (item) => {
     return {
@@ -30,11 +47,6 @@ export const mapAcolito = (item) => {
         idade: calIdade(item.dataNascimento)
     };
 }
-/**
-    * Retorna a data máxima (YYYY-MM-DD) para selecionar
-    * pessoas com idade >= idadeMinima.
-    * Exemplo: idadeMinima = 18 em 2025 → retorna "2007-12-31"
-*/
 export function calcularDataMaximaPorIdade(idadeMinima) {
     if (isNaN(idadeMinima)) {
         throw new Error("Idade mínima inválida");

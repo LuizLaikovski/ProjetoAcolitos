@@ -13,8 +13,48 @@ function runQuery(res, query, params = []) {
     });
 }
 
+export const testViews = (_, res) => {
+    runQuery(res, 'select * from viewAcolitos;')
+}
+
+export const getAcolitosSearch = (req, res) => {
+    const {idade, sexo, missas, comunidades} = req.query;
+
+    let sqlComand = 'select * from viewAcolitos where 1=1';
+    let params = [];
+
+    if (idade) {
+        const dataMax = calcularDataMaximaPorIdade(idade);
+        sqlComand += ' AND dataNascimento < ?';
+        params.push(dataMax);
+    }
+
+    if (sexo) {
+        sqlComand += ' AND sexo = ?';
+        params.push(sexo);
+    }
+
+    if (missas) {
+        sqlComand += ' AND missas = ?';
+        params.push(missas);
+    }
+
+    if (comunidades) {
+        sqlComand += ' AND comunidades = ?';
+        params.push(comunidades);
+    }
+
+    sqlComand += ';'
+    let debugQuery = sqlComand;
+    params.forEach(p => {
+        debugQuery = debugQuery.replace("?", `'${p}'`);
+    });
+    console.log("Query final:", debugQuery);
+    runQuery(res,sqlComand, params)
+}
+
 export const getAcolitos = (_, res) => {
-    runQuery(res, `${BASE_QUERY} ${GROUP_ORDER}`);
+    runQuery(res, `select * from viewAcolitos;`);
 };
 
 export const getAcolito = (req, res) => {

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 const Form = () => {
     const [formDataSearch, setFormDataSearch] = useState({
-        age: '',
+        idade: '',
         sexo: '',
         missas: '',
         comunidade: ''
@@ -72,24 +72,35 @@ const Form = () => {
 
     const handleSubmitSearch = async (e: React.FormEvent) => {
         e.preventDefault();
+
+
         
         try {
             e.preventDefault();
 
             const dataSearch = {
-                age: formDataSearch.age,
+                idade: formDataSearch.idade,
                 sexo: formDataSearch.sexo,
                 missas: formDataSearch.missas,
-                comunidade: formDataSearch.comunidade
+                comunidades: formDataSearch.comunidade
             }
+            
+            const params = new URLSearchParams();
+            if (dataSearch.idade) params.append('idade', dataSearch.idade);
+            if (dataSearch.sexo) params.append('sexo', dataSearch.sexo);
+            if (dataSearch.missas) params.append('missas', dataSearch.missas);
+            if (dataSearch.comunidades) params.append('comunidade', dataSearch.comunidades);
 
-            const response  = await fetch(`http://localhost:8800/idade/${dataSearch.age}`, {
+            console.log("parametros para busca: " + params.toString()); 
+            
+
+            const response  = await fetch(`http://localhost:8800/search?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(dataSearch),
-            })
+            });
+            
 
             if (!response.ok) {
                 throw new Error('Erro na requisição: ' + response.status);
@@ -161,9 +172,9 @@ const Form = () => {
                         <label htmlFor="age" className="text-blue-400">Idade:</label>
                         <input
                         type="number"
-                        id="age"
-                        name="age"
-                        value={formDataSearch.age}
+                        id="idade"
+                        name="idade"
+                        value={formDataSearch.idade}
                         onChange={handleChange}
                         className="border-blue-300 bg-blue-100 border-2 rounded-md p-2 w-full" />
                     </div>
@@ -178,7 +189,6 @@ const Form = () => {
                             <option value="" disabled selected>Selecione</option>
                             <option value="MAS">Masculino</option>
                             <option value="FEM">Feminino</option>
-                            <option value="outro">Outro</option>
                         </select>
                     </div>
                     <div>
@@ -190,11 +200,11 @@ const Form = () => {
                         onChange={handleChange}
                         className="border-2 border-yellow-400 bg-yellow-100 text-yellow-500 rounded-md p-2 w-full">
                             <option value="" disabled selected>Selecione</option>
-                            <option value="1">Sabádos 19:30</option>
-                            <option value="2">Domingos 8h</option>
-                            <option value="3">Domingos 18h</option>
-                            <option value="4">Quartas-Feiras 19:30</option>
-                            <option value="5">Comunidade(s)</option>
+                            <option value="Sabado">Sabádos 19:30</option>
+                            <option value="Domingo 8h">Domingos 8h</option>
+                            <option value="Domingo 18h">Domingos 18h</option>
+                            <option value="Quartas">Quartas-Feiras 19:30</option>
+                            <option value="Comunidades">Comunidade(s)</option>
                         </select>
                     </div>
                     <div>
@@ -206,13 +216,13 @@ const Form = () => {
                         onChange={handleChange}
                         className="border-red-400 text-red-400 bg-red-100 border-2 rounded-md p-2 w-full">
                                 <option value="" disabled selected>Selecione</option>
-                                <option value="1">Matriz</option>
-                                <option value="2">São Miguel Arcanjo</option>
-                                <option value="3">Nossa Senhora de Fátima</option>
-                                <option value="4">Santa Paulina</option>
-                                <option value="5">São Domingos Sávio</option>
-                                <option value="6">São João Batista</option>
-                                <option value="7">Nossa Senhora Aparecida</option>
+                                <option value="Matriz">Matriz</option>
+                                <option value="São Miguel Arcanjo">São Miguel Arcanjo</option>
+                                <option value="Nossa Senhora de Fatima">Nossa Senhora de Fátima</option>
+                                <option value="Santa Paulina">Santa Paulina</option>
+                                <option value="São Domingos Savio">São Domingos Sávio</option>
+                                <option value="São Joao Batista">São João Batista</option>
+                                <option value="Nossa Senhora Aparecida">Nossa Senhora Aparecida</option>
                         </select>
                     </div>
                     <div>

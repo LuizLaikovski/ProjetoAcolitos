@@ -7,7 +7,6 @@ interface CardProp {
     id: number,
     nome: string;
     sexo: string;
-    dataNascimento: string;
     idade: number;
     telefone: string;   
     tamTunica: string;
@@ -17,7 +16,7 @@ interface CardProp {
     comentario: string;
 }
 
-const Card = ({ id, nome, sexo, dataNascimento, idade, telefone, tamTunica, comunidades, missas, cerimonialista, comentario }: CardProp) => {
+const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas, cerimonialista, comentario }: CardProp) => {
 
     const [modalOpenEdit, setModalOpenEdit] = useState(false);
     const [modalOpenTrash, setModalOpenTrash] = useState(false);
@@ -36,10 +35,10 @@ const Card = ({ id, nome, sexo, dataNascimento, idade, telefone, tamTunica, comu
             <div key={id} className="box h-[70dvh] w-[25dvw] rounded-lg p-4 shadow-2xl bg-white">
                 <div className="flex items-center mb-4">
                     <h2 className="text-2xl font-bold">{nome}</h2>
-                    <div>
-                        <button className="cursor-pointer" onClick={ShowModalEdit}><FontAwesomeIcon icon={faPencil} color="blue" className="ml-[8dvw]" size="xl" /></button>
-                        <button className="cursor-pointer" onClick={ShowModalTrash}><FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" /></button>
-                    </div>
+                </div>
+                <div className="">
+                    <button className="cursor-pointer" onClick={ShowModalEdit}><FontAwesomeIcon icon={faPencil} color="blue" className="ml-[8dvw]" size="xl" /></button>
+                    <button className="cursor-pointer" onClick={ShowModalTrash}><FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" /></button>
                 </div>
                 <div className="flex items-center mb-4">
                     {/* Sexo com cor dinâmica */}
@@ -77,7 +76,7 @@ const Card = ({ id, nome, sexo, dataNascimento, idade, telefone, tamTunica, comu
                                 ))}
                             </>
                         ) : (
-                            <p className="m-3 text-[14px]">Nenhuma missa disponível</p>
+                            <p className="m-3 text-[14px] w-[170%]">Nenhuma missa disponível</p>
                         )}
                     </div>
 

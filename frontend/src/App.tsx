@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Card from "./components/Card";
-import Header from "./components/Header"
 import Form from "./components/Form";
 
 export interface AcolitoProp {
@@ -40,7 +39,6 @@ function App() {
           <Card 
             nome={acolito.nome}
             sexo={acolito.sexo}
-            dataNascimento={acolito.dataNascimento}
             idade={acolito.idade}
             telefone={acolito.telefone}
             tamTunica={acolito.tamTunica}
