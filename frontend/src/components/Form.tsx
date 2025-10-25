@@ -1,13 +1,19 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import type { AcolitoProp } from "../App";
 
-const Form = () => {
+interface FormProp {
+    setAcolitos: React.Dispatch<React.SetStateAction<AcolitoProp[]>>;
+}
+
+const Form = ({setAcolitos}: FormProp) => {
     const [formDataSearch, setFormDataSearch] = useState({
         idade: '',
         sexo: '',
         missas: '',
-        comunidade: ''
+        comunidade: '',
+        cerimonialista: ''
     });
     const [formData, setFormData] = useState({
         nameNew: '',
@@ -71,10 +77,6 @@ const Form = () => {
     };
 
     const handleSubmitSearch = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-
-        
         try {
             e.preventDefault();
 
@@ -106,17 +108,15 @@ const Form = () => {
                 throw new Error('Erro na requisição: ' + response.status);
             }
 
-            const data = response.json();
+            const data = await response.json();
             console.log("Acolito pesquisado: ", data);
-            
+            setAcolitos(data);
         } catch (error) {
             console.error('Erro ao procurar acolito:', error);
         }
     };
 
     const handleSubmitNew = async (e: React.FormEvent) => {
-        e.preventDefault();
-        // console.log(formData);
         try {
             e.preventDefault();
 
@@ -167,7 +167,7 @@ const Form = () => {
                     <h1 className="text-3xl font-bold">Busca de Acolitos:</h1>
                     <button onClick={openModalNew} className="p-3 border-1 rounded-xl w-full xl:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">Adicionar Novo Acólito/Ancilia</button>
                 </div>
-                <div className="grid grid-cols-5 gap-4 w-full mt-6">
+                <div className="grid grid-cols-6 gap-4 w-full mt-6">
                     <div>
                         <label htmlFor="age" className="text-blue-400">Idade:</label>
                         <input
@@ -223,6 +223,19 @@ const Form = () => {
                                 <option value="São Domingos Savio">São Domingos Sávio</option>
                                 <option value="São Joao Batista">São João Batista</option>
                                 <option value="Nossa Senhora Aparecida">Nossa Senhora Aparecida</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="cerimonialista" className="text-green-500">Cerimonialista</label>
+                        <select
+                        id="cerimonialista"
+                        name="cerimonialista"
+                        value={formDataSearch.cerimonialista}
+                        onChange={handleChange}
+                        className="border-green-400 text-green-400 bg-green-100 border-2 rounded-md p-2 w-full">
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="true">Sim</option>
+                                <option value="false">Não</option>
                         </select>
                     </div>
                     <div>

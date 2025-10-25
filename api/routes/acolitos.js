@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get('/testViews', testViews);  // testar as views do banco de dados
 router.get('/search', getAcolitosSearch);
-
 router.get('/', getAcolitos);
 router.get('/:id', getAcolito);
 router.get('/idade/:idadeMinima', getAcolitosByIdadeMinima);
