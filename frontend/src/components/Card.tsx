@@ -37,8 +37,6 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                     <h2 className="text-2xl font-bold">{nome}</h2>
                 </div>
                 <div className="">
-                    <button className="cursor-pointer" onClick={ShowModalEdit}><FontAwesomeIcon icon={faPencil} color="blue" className="ml-[8dvw]" size="xl" /></button>
-                    <button className="cursor-pointer" onClick={ShowModalTrash}><FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" /></button>
                 </div>
                 <div className="flex items-center mb-4">
                     {/* Sexo com cor dinâmica */}
@@ -47,17 +45,18 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                     <p className="px-3 py-1 rounded-xl bg-amber-200 m-2.5 text-amber-900">
                         {idade} anos
                     </p>
-
-                    {/* Só aparece se for cerimonialista */}
-                    {cerimonialista ? (
-                        <p className="px-3 py-1 font-bold text-green-900 rounded-xl bg-green-400">
-                            Cerimonialista
-                        </p>
-                    ) : null}
+                    <button className="cursor-pointer" onClick={ShowModalEdit}><FontAwesomeIcon icon={faPencil} color="blue" size="xl" /></button>
+                    <button className="cursor-pointer" onClick={ShowModalTrash}><FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" /></button>
                 </div>
 
                 
                 <ul className="mt-4">
+                    {/* Só aparece se for cerimonialista */}
+                    {cerimonialista ? (
+                        <li className="px-3 w-[13ch] py-1 font-bold text-green-900 rounded-xl bg-green-400">
+                            Cerimonialista
+                        </li>
+                    ) : null}
                     <li className="m-3 text-[14px]"><a className="text-green-500" href={`https://wa.me/${telefone}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faWhatsapp} color="green" size="2xl" className="mr-3" />{telefone}</a></li>
                     <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faLocationDot} size="2xl" className="mr-3" /> Comunidades: {comunidades.join(", ")}</li>
                     <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faTShirt} size="2xl" className="mr-3" /> Túnica: {tamTunica}</li>

@@ -17,10 +17,10 @@ export interface AcolitoProp {
 function App() {
   return (
     <>
-    <div className="bg-gray-200 flex justify-center items-center flex-col">
-      <Acolitos />
-      <div className="w-[80dvw] h-auto grid grid-cols-3 gap-8 mt-10"></div>
-    </div>
+      <div className="bg-gray-200 flex justify-center items-center flex-col">
+        <Acolitos />
+        <div className="w-[80dvw] h-auto grid grid-cols-3 gap-8 mt-10"></div>
+      </div>
     </>
   )
 }

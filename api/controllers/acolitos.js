@@ -17,6 +17,10 @@ export const testViews = (_, res) => {
     runQuery(res, 'select * from viewAcolitos;')
 }
 
+export const test = (_, res) =>  {
+    runQueryTest(res, 'select * from viewAcolitos;')
+}
+
 export const getAcolitosSearch = (req, res) => {
     const {idade, sexo, missas, comunidades, cerimonialista} = req.query;
 
