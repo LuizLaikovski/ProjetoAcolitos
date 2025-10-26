@@ -18,7 +18,7 @@ export const testViews = (_, res) => {
 }
 
 export const getAcolitosSearch = (req, res) => {
-    const {idade, sexo, missas, comunidades} = req.query;
+    const {idade, sexo, missas, comunidades, cerimonialista} = req.query;
 
     let sqlComand = 'select * from viewAcolitos where 1=1';
     let params = [];
@@ -42,6 +42,10 @@ export const getAcolitosSearch = (req, res) => {
     if (comunidades) {
         sqlComand += ' AND comunidades = ?';
         params.push(comunidades);
+    }
+
+    if (cerimonialista) {
+        sqlComand += ' AND cerimonialista > 0'
     }
 
     sqlComand += ';'

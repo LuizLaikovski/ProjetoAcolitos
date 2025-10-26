@@ -84,7 +84,8 @@ const Form = ({setAcolitos}: FormProp) => {
                 idade: formDataSearch.idade,
                 sexo: formDataSearch.sexo,
                 missas: formDataSearch.missas,
-                comunidades: formDataSearch.comunidade
+                comunidades: formDataSearch.comunidade,
+                cerimonialista: formDataSearch.cerimonialista
             }
             
             const params = new URLSearchParams();
@@ -92,9 +93,10 @@ const Form = ({setAcolitos}: FormProp) => {
             if (dataSearch.sexo) params.append('sexo', dataSearch.sexo);
             if (dataSearch.missas) params.append('missas', dataSearch.missas);
             if (dataSearch.comunidades) params.append('comunidade', dataSearch.comunidades);
+            if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista)
 
             console.log("parametros para busca: " + params.toString()); 
-            
+            console.log(`http://localhost:8800/search?${params.toString()}`);
 
             const response  = await fetch(`http://localhost:8800/search?${params.toString()}`, {
                 method: 'GET',
