@@ -92,11 +92,10 @@ const Form = ({setAcolitos}: FormProp) => {
             if (dataSearch.idade) params.append('idade', dataSearch.idade);
             if (dataSearch.sexo) params.append('sexo', dataSearch.sexo);
             if (dataSearch.missas) params.append('missas', dataSearch.missas);
-            if (dataSearch.comunidades) params.append('comunidade', dataSearch.comunidades);
+            if (dataSearch.comunidades) params.append('comunidades', dataSearch.comunidades);
             if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista)
 
             console.log("parametros para busca: " + params.toString()); 
-            console.log(`http://localhost:8800/search?${params.toString()}`);
 
             const response  = await fetch(`http://localhost:8800/search?${params.toString()}`, {
                 method: 'GET',
@@ -220,7 +219,7 @@ const Form = ({setAcolitos}: FormProp) => {
                                 <option value="" disabled selected>Selecione</option>
                                 <option value="Matriz">Matriz</option>
                                 <option value="São Miguel Arcanjo">São Miguel Arcanjo</option>
-                                <option value="Nossa Senhora de Fatima">Nossa Senhora de Fátima</option>
+                                <option value="Nossa Senhora de Fátima">Nossa Senhora de Fátima</option>
                                 <option value="Santa Paulina">Santa Paulina</option>
                                 <option value="São Domingos Savio">São Domingos Sávio</option>
                                 <option value="São Joao Batista">São João Batista</option>
@@ -228,7 +227,7 @@ const Form = ({setAcolitos}: FormProp) => {
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="cerimonialista" className="text-green-500">Cerimonialista</label>
+                        <label htmlFor="cerimonialista" className="text-green-500">cerimonialista</label>
                         <select
                         id="cerimonialista"
                         name="cerimonialista"
@@ -255,7 +254,7 @@ const Form = ({setAcolitos}: FormProp) => {
 
             {modalOpenNew && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"onClick={openModalNew}></div>
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={openModalNew}></div>
 
                     <div className="relative bg-white w-[80dvw] max-w-[600px] min-w-[300px] p-6 rounded-xl shadow-xl z-50">
                         <button onClick={openModalNew} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
@@ -406,7 +405,7 @@ const Form = ({setAcolitos}: FormProp) => {
                                     </select>
                                 </div>
                                 <div className="flex flex-col">
-                                    <label htmlFor="outros" className="text-blue-500">Cerimonialista:</label>
+                                    <label htmlFor="outros" className="text-blue-500">cerimonialista:</label>
                                     <select
                                     name="cerimonialistaNew"
                                     id="cerimonialistaNew"

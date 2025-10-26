@@ -32,8 +32,8 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
 
     return (
         <>
-            <div key={id} className="box h-[70dvh] w-[25dvw] rounded-lg p-4 shadow-2xl bg-white">
-                <div className="flex items-center mb-4">
+            <div key={id} className="box h-auto w-[25dvw] rounded-lg p-4 shadow-2xl bg-white">
+                <div className="flex items-center mb-2">
                     <h2 className="text-2xl font-bold">{nome}</h2>
                 </div>
                 <div className="">
@@ -83,8 +83,6 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                         <h4 className="text-blue-600">Observações:</h4>
                         <p className="text-[13px] text-blue-600">{comentario || "Nenhuma observação disponível."}</p>
                     </div>
-                    {/* <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faChurch} size="2xl" className="mr-3" /> Missas: {missas.join(", ")}</li> */}
-                    {/* <li className="m-3 text-[14px]"><FontAwesomeIcon icon={faComment} size="2xl" className="mr-3" /> Comentário: {comentario}</li> */}
                 </ul>
             </div>
 

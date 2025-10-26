@@ -17,10 +17,6 @@ export const testViews = (_, res) => {
     runQuery(res, 'select * from viewAcolitos;')
 }
 
-export const test = (_, res) =>  {
-    runQueryTest(res, 'select * from viewAcolitos;')
-}
-
 export const getAcolitosSearch = (req, res) => {
     const {idade, sexo, missas, comunidades, cerimonialista} = req.query;
 
@@ -49,9 +45,10 @@ export const getAcolitosSearch = (req, res) => {
     }
 
     if (cerimonialista) {
-        sqlComand += ' AND cerimonialista > 0'
+        sqlComand += ' AND cerimonialista = 1'
     }
 
+    console.log(sqlComand);
     sqlComand += ';'
     let debugQuery = sqlComand;
     params.forEach(p => {

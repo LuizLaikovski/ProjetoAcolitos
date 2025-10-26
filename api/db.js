@@ -13,3 +13,12 @@ export const db = mysql.createConnection({
         rejectUnauthorized: false
     }
 });
+
+// Testa a conexão
+db.connect((err) => {
+    if (err) {
+        console.error("❌ Erro ao conectar ao banco:", err);
+    } else {
+        console.log("✅ Conectado com sucesso ao banco de dados Aiven!");
+    }
+});
