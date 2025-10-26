@@ -6,14 +6,16 @@ import Form from "./Form";
 const Acolitos = () => {
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
 
+    const api_url = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         const fetchAcolito = async () => {
-            const response = await fetch("http://localhost:8800");
+            const response = await fetch(api_url);
             const data = await response.json();
             setAcolito(data);
         };
         fetchAcolito();
-    }, []);
+    }, [api_url]);
 
     return (
         <>

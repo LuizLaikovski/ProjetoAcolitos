@@ -28,6 +28,8 @@ const Form = ({setAcolitos}: FormProp) => {
     });
     const [modalOpenNew, setModalOpenNew] = useState(false);
 
+    const api_url = import.meta.env.VITE_API_URL;
+
     const openModalNew = () => {
         setModalOpenNew(!modalOpenNew);
     }
@@ -87,7 +89,7 @@ const Form = ({setAcolitos}: FormProp) => {
                 comunidades: formDataSearch.comunidade,
                 cerimonialista: formDataSearch.cerimonialista
             }
-            
+
             const params = new URLSearchParams();
             if (dataSearch.idade) params.append('idade', dataSearch.idade);
             if (dataSearch.sexo) params.append('sexo', dataSearch.sexo);
@@ -95,9 +97,7 @@ const Form = ({setAcolitos}: FormProp) => {
             if (dataSearch.comunidades) params.append('comunidades', dataSearch.comunidades);
             if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista)
 
-            console.log("parametros para busca: " + params.toString()); 
-
-            const response  = await fetch(`http://localhost:8800/search?${params.toString()}`, {
+            const response  = await fetch(`${api_url}search?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const Form = ({setAcolitos}: FormProp) => {
                 missas: formData.missasNew
             }
         
-            const response  = await fetch('http://localhost:8800/newAcolito', {
+            const response  = await fetch(`${api_url}newAcolito`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -150,16 +150,13 @@ const Form = ({setAcolitos}: FormProp) => {
             console.log('Acolito cadastrado com sucesso:', data);
 
             console.log(dataInsert);
-            // setModalOpenNew(false);
+            setModalOpenNew(false);
         } catch (error) {
             console.error('Erro ao cadastrar acolito:', error);
+        } finally {
+            location.reload();
         }
     }
-
-    const button = document.getElementById("submitNew");
-        button?.addEventListener("click", function() {
-        location.reload();
-    })
 
     return (
         <>

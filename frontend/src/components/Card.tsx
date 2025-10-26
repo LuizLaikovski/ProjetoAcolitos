@@ -107,9 +107,11 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                     <button onClick={ShowModalEdit} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
                         <FontAwesomeIcon icon={faClose} />
                     </button>
-                    <div className="text-white">
-                        <h2 className="text-xl font-bold mb-4">Título do Modal</h2>
-                        <p>Aqui vai o conteúdo do modal.</p>
+                    <div className="text-black">
+                        <h2 className="text-xl font-bold mb-4">{nome}</h2>
+                        <div className="">
+
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -124,7 +126,7 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                         <FontAwesomeIcon icon={faClose} />
                     </button>
                     <div className="text-black">
-                        <h2 className="text-xl font-bold mb-4">Título do Modal</h2>
+                        <h2 className="text-xl font-bold mb-4">{nome}</h2>
                         <p>Aqui vai o conteúdo do modal.</p>
                     </div>
                     </div>
