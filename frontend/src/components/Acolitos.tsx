@@ -12,7 +12,7 @@ const Acolitos = () => {
         console.log(api_url);
         const fetchAcolito = async () => {
             try {
-                const response = await fetch(`${api_url}/acolitos`);
+                const response = await fetch(`${api_url}`);
                 const data = await response.json();
                 setAcolito(data);
             } catch (error) {
