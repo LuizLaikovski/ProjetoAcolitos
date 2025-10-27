@@ -4,7 +4,6 @@ import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import ErrorPage from './routes/ErrorPage.tsx'
-import Name from './routes/Name.tsx'
 
 const router = createBrowserRouter([
   {
@@ -14,10 +13,6 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <App />
-  },
-  {
-    path: "/search",
-    element: <Name />
   },
   {
     path: "*",
