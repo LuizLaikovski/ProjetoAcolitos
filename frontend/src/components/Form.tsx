@@ -101,7 +101,7 @@ const Form = ({setAcolitos}: FormProp) => {
             if (dataSearch.sexo) params.append('sexo', dataSearch.sexo);
             if (dataSearch.missas) params.append('missas', dataSearch.missas);
             if (dataSearch.comunidades) params.append('comunidades', dataSearch.comunidades);
-            if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista)
+            if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista);
 
             const response  = await fetch(`${api_url}search?${params.toString()}`, {
                 method: 'GET',

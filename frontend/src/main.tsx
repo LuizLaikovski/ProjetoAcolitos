@@ -4,11 +4,12 @@ import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import ErrorPage from './routes/ErrorPage.tsx'
+import LoginScreen from './routes/LoginScreen.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/home" replace />
+    element: <LoginScreen />
   },
   {
     path: "/home",

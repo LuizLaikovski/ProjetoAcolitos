@@ -2,6 +2,18 @@ import { db } from "../db.js";
 import { mapAcolito, calcularDataMaximaPorIdade, insertComunidades, insertMissas, updateRelacionamentos } from "../dto/acolitosDTO.js";
 import { BASE_QUERY, GROUP_ORDER } from "../querys/querys.js";
 
+export const runAuthQuery = (query, params = []) => {
+    return new Promise((resolve, reject) => {
+        db.query(query, params, (err, data) => {
+            if (err) {
+                console.error("Erro ao executar a query:", err);
+                reject(err);
+                return;
+            }
+            resolve(data.length > 0);
+        });
+    });
+};
 
 function runQuery(res, query, params = []) {
     db.query(query, params, (err, data) => {
@@ -13,9 +25,28 @@ function runQuery(res, query, params = []) {
     });
 }
 
-export const testViews = (_, res) => {
-    runQuery(res, 'select * from viewAcolitos;')
-}
+export const usersAcess = async (req, res) => {
+    try {
+        const { user, password } = req.body;
+        const userExists = await runAuthQuery(
+            `SELECT user, password FROM adms WHERE user = ? AND password = ?`, 
+            [user, password]
+        );
+        if (userExists) {
+            console.log('Login autorizado para:', user);
+            return res.status(200).json({ access: true });
+        } else {
+            console.log('Login negado para:', user);
+            return res.status(200).json({ access: false });
+        }
+    } catch (error) {
+        console.error('Erro no processo de login:', error);
+        return res.status(500).json({ 
+            access: false, 
+            error: 'Erro interno do servidor' 
+        });
+    }
+};
 
 export const getAcolitosSearch = (req, res) => {
     const {idade, sexo, missas, comunidades, cerimonialista} = req.query;
