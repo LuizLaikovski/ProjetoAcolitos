@@ -3,9 +3,24 @@ import type { AcolitoProp } from "../App";
 import Card from "./Card";
 import Form from "./Form";
 
+const calcularIdade = (dataNascimento: string): number => {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    
+    const mesAtual = hoje.getMonth();
+    const mesNascimento = nascimento.getMonth();
+    
+    if (mesAtual < mesNascimento || 
+        (mesAtual === mesNascimento && hoje.getDate() < nascimento.getDate())) {
+        idade--;
+    }
+    
+    return idade;
+};
+
 const Acolitos = () => {
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
-
     const api_url = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
@@ -13,7 +28,13 @@ const Acolitos = () => {
             try {
                 const response = await fetch(`${api_url}`);
                 const data = await response.json();
-                setAcolito(data);
+                
+                const acolitosComIdade = data.map((item: AcolitoProp) => ({
+                    ...item,
+                    idade: item.dataNascimento ? calcularIdade(item.dataNascimento) : 0
+                }));
+                
+                setAcolito(acolitosComIdade);
             } catch (error) {
                 console.error("Erro ao buscar acólitos:", error);
             }
@@ -26,18 +47,21 @@ const Acolitos = () => {
             <Form setAcolitos={setAcolito} />
             <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8">
                 {acolito.length > 0 ? (
-                    acolito.map((item) => <Card 
-                    key={item.id}
-                    nome={item.nome}
-                    id={item.id}
-                    sexo={item.sexo}
-                    idade={item.idade}
-                    telefone={item.telefone}
-                    tamTunica={item.tamTunica}
-                    comunidades={item.comunidades}
-                    missas={item.missas}
-                    cerimonialista={item.cerimonialista}
-                    comentario={item.comentario} />)
+                    acolito.map((item) =>
+                        <Card 
+                            key={item.id}
+                            nome={item.nome}
+                            id={item.id}
+                            sexo={item.sexo}
+                            idade={item.idade} // Agora com a idade calculada
+                            telefone={item.telefone}
+                            tamTunica={item.tamTunica}
+                            comunidades={item.comunidades}
+                            missas={item.missas}
+                            cerimonialista={item.cerimonialista}
+                            comentario={item.comentario} 
+                        />
+                    )
                 ) : (
                     <p className="text-gray-500 text-lg mt-4">
                         Nenhum acólito encontrado com os filtros selecionados.

@@ -50,7 +50,7 @@ const LoginScreen = () => {
                     onChange={(e) => setUser(e.target.value)}/>
                     
                     <input 
-                    type="text" 
+                    type="password" 
                     placeholder="Senha"
                     className="border-blue-200 bg-blue-50 border-2 p-2 rounded-md w-[20dvw] text-xl text-center" 
                     value={password}
