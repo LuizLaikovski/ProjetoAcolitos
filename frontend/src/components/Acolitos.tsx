@@ -9,6 +9,7 @@ const Acolitos = () => {
     const api_url = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
+        console.log(api_url);
         const fetchAcolito = async () => {
             try {
                 const response = await fetch(`${api_url}/acolitos`);
