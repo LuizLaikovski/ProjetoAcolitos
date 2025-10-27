@@ -10,9 +10,13 @@ const Acolitos = () => {
 
     useEffect(() => {
         const fetchAcolito = async () => {
-            const response = await fetch(api_url);
-            const data = await response.json();
-            setAcolito(data);
+            try {
+                const response = await fetch(`${api_url}/acolitos`);
+                const data = await response.json();
+                setAcolito(data);
+            } catch (error) {
+                console.error("Erro ao buscar acólitos:", error);
+            }
         };
         fetchAcolito();
     }, [api_url]);
