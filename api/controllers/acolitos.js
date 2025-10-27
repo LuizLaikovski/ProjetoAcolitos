@@ -1,10 +1,10 @@
 import { db } from "../db.js";
-import { mapAcolito, calcularDataMaximaPorIdade, insertComunidades, insertMissas, updateRelacionamentos } from "../dto/acolitosDTO.js";
+import { calcularDataMaximaPorIdade, insertComunidades, insertMissas, updateRelacionamentos } from "../dto/acolitosDTO.js";
 import { BASE_QUERY, GROUP_ORDER } from "../querys/querys.js";
 
 // Função runQuery com pool
 export const runQuery = (res, query, params = []) => {
-    pool.getConnection((err, connection) => {
+    db.getConnection((err, connection) => {
         if (err) {
             console.error("Erro ao obter conexão:", err);
             return res.status(500).json({ 
@@ -32,40 +32,43 @@ export const runQuery = (res, query, params = []) => {
     });
 };
 
-// Função específica para login (retorna Promise)
+// Função runAuthQuery corrigida
 export const runAuthQuery = (query, params = []) => {
     return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
+        db.getConnection((err, connection) => {
             if (err) {
-                console.error("Erro ao obter conexão:", err);
+                console.error("❌ Erro ao obter conexão:", err);
                 reject(err);
                 return;
             }
+
+            console.log('📊 Executando query:', query);
+            console.log('🔑 Parâmetros:', params);
 
             connection.query(query, params, (error, data) => {
                 // ⚠️ SEMPRE libere a conexão!
                 connection.release();
                 
                 if (error) {
-                    console.error("Erro na query:", error);
+                    console.error("❌ Erro na query:", error);
                     reject(error);
                     return;
                 }
                 
-                console.log('Auth query - Linhas encontradas:', data.length);
+                console.log('✅ Query executada. Linhas:', data.length);
                 resolve(data.length > 0);
             });
         });
     });
 };
 
+// Rota de login
 export const usersAcess = async (req, res) => {
     try {
         const { user, password } = req.body;
         
         console.log('🔐 Tentativa de login:', { user });
 
-        // Use runAuthQuery para login
         const userExists = await runAuthQuery(
             `SELECT user, password FROM adms WHERE user = ? AND password = ?`, 
             [user, password]
@@ -89,6 +92,7 @@ export const usersAcess = async (req, res) => {
         });
     }
 };
+
 
 export const getAcolitosSearch = (req, res) => {
     const {idade, sexo, missas, comunidades, cerimonialista} = req.query;
