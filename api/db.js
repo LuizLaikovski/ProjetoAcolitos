@@ -3,7 +3,8 @@ import mysql from 'mysql';
 
 dotenv.config();
 
-export const db = mysql.createConnection({
+// Use POOL em vez de createConnection
+export const pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
@@ -11,14 +12,32 @@ export const db = mysql.createConnection({
     database: process.env.DB_DATABASE,
     ssl: {
         rejectUnauthorized: false
+    },
+    connectionLimit: 10, // Número máximo de conexões
+    acquireTimeout: 60000, // 60 segundos
+    timeout: 60000, // 60 segundos
+    reconnect: true
+});
+
+// Testa a conexão do pool
+pool.getConnection((err, connection) => {
+    if (err) {
+        console.error("❌ Erro ao conectar ao banco Aiven:", err);
+    } else {
+        console.log("✅ Conectado com sucesso ao banco de dados Aiven!");
+        connection.release(); // Libera a conexão de volta para o pool
     }
 });
 
-// Testa a conexão
-db.connect((err) => {
-    if (err) {
-        console.error("❌ Erro ao conectar ao banco:", err);
-    } else {
-        console.log("✅ Conectado com sucesso ao banco de dados Aiven!");
-    }
+// Eventos do pool para debug
+pool.on('acquire', (connection) => {
+    console.log('🔗 Conexão adquirida do pool');
+});
+
+pool.on('release', (connection) => {
+    console.log('🔄 Conexão liberada de volta ao pool');
+});
+
+pool.on('error', (err) => {
+    console.error('💥 Erro no pool:', err);
 });

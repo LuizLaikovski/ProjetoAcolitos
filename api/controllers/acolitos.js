@@ -2,48 +2,90 @@ import { db } from "../db.js";
 import { mapAcolito, calcularDataMaximaPorIdade, insertComunidades, insertMissas, updateRelacionamentos } from "../dto/acolitosDTO.js";
 import { BASE_QUERY, GROUP_ORDER } from "../querys/querys.js";
 
-export const runAuthQuery = (query, params = []) => {
-    return new Promise((resolve, reject) => {
-        db.query(query, params, (err, data) => {
+// Função runQuery com pool
+export const runQuery = (res, query, params = []) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.error("Erro ao obter conexão:", err);
+            return res.status(500).json({ 
+                error: "ERRO DE CONEXÃO COM O BANCO", 
+                message: "Não foi possível conectar ao banco de dados" 
+            });
+        }
+        console.log('Executando query:', query);
+        console.log('🔑 Parâmetros:', params);
+
+        connection.query(query, params, (err, data) => {
+            // ⚠️ SEMPRE libere a conexão!
+            connection.release();
+
             if (err) {
-                console.error("Erro ao executar a query:", err);
-                reject(err);
-                return;
+                console.error("❌ Erro na query:", err);
+                return res.status(500).json({ 
+                    error: "ERRO NO BANCO DE DADOS", 
+                    message: err.sqlMessage || "Erro ao executar consulta" 
+                });
             }
-            resolve(data.length > 0);
+            console.log('Query executada com sucesso. Linhas:', data.length);
+            return res.status(200).json(data);
         });
     });
 };
 
-function runQuery(res, query, params = []) {
-    db.query(query, params, (err, data) => {
-        if (err) {
-            console.error("Erro ao executar a query:", err);
-            return res.status(500).json({ error: "ERRO NO BANCO DE DADOS", data: err });
-        }
-        return res.status(200).json(data.map(mapAcolito));
+// Função específica para login (retorna Promise)
+export const runAuthQuery = (query, params = []) => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                console.error("Erro ao obter conexão:", err);
+                reject(err);
+                return;
+            }
+
+            connection.query(query, params, (error, data) => {
+                // ⚠️ SEMPRE libere a conexão!
+                connection.release();
+                
+                if (error) {
+                    console.error("Erro na query:", error);
+                    reject(error);
+                    return;
+                }
+                
+                console.log('Auth query - Linhas encontradas:', data.length);
+                resolve(data.length > 0);
+            });
+        });
     });
-}
+};
 
 export const usersAcess = async (req, res) => {
     try {
         const { user, password } = req.body;
+        
+        console.log('🔐 Tentativa de login:', { user });
+
+        // Use runAuthQuery para login
         const userExists = await runAuthQuery(
             `SELECT user, password FROM adms WHERE user = ? AND password = ?`, 
             [user, password]
         );
+
+        console.log('📊 Usuário autorizado?:', userExists);
+
         if (userExists) {
-            console.log('Login autorizado para:', user);
+            console.log('✅ Login autorizado para:', user);
             return res.status(200).json({ access: true });
         } else {
-            console.log('Login negado para:', user);
+            console.log('❌ Login negado para:', user);
             return res.status(200).json({ access: false });
         }
     } catch (error) {
-        console.error('Erro no processo de login:', error);
+        console.error('💥 Erro no processo de login:', error);
         return res.status(500).json({ 
             access: false, 
-            error: 'Erro interno do servidor' 
+            error: 'Erro interno do servidor',
+            message: error.message 
         });
     }
 };
