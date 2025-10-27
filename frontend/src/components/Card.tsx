@@ -1,7 +1,9 @@
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faClose, faLocationDot, faPencil, faTrashAlt, faTShirt } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faPencil, faTrashAlt, faTShirt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import ModalEdit from "./ModalEdit";
+import ModalTrash from "./ModalTrash";
 
 interface CardProp {
     id: number,
@@ -14,22 +16,13 @@ interface CardProp {
     missas: string[];
     cerimonialista: boolean;
     comentario: string;
+    setModalOpenEdit?: React.Dispatch<React.SetStateAction<boolean>>;
+    setModalOpenTrash?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas, cerimonialista, comentario }: CardProp) => {
-
-    const [modalOpenEdit, setModalOpenEdit] = useState(false);
-    const [modalOpenTrash, setModalOpenTrash] = useState(false);
-
-    const ShowModalEdit = () => {
-        setModalOpenEdit(!modalOpenEdit);
-    }
-
-    const ShowModalTrash = () => {
-        setModalOpenTrash(!modalOpenTrash);
-    }
-
-
+    const [modalEdit, setModalEdit] = useState(false);
+    const [modalTrash, setModalTrash] = useState(false);
     return (
         <>
             <div key={id} className="box h-auto w-[25dvw] rounded-lg p-4 shadow-2xl bg-white">
@@ -45,8 +38,8 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                     <p className="px-3 py-1 rounded-xl bg-amber-200 m-2.5 text-amber-900">
                         {idade} anos
                     </p>
-                    <button className="cursor-pointer" onClick={ShowModalEdit}><FontAwesomeIcon icon={faPencil} color="blue" size="xl" /></button>
-                    <button className="cursor-pointer" onClick={ShowModalTrash}><FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" /></button>
+                    <button className="cursor-pointer" onClick={() => setModalEdit(true)}><FontAwesomeIcon icon={faPencil} color="blue" size="xl" /></button>
+                    <button className="cursor-pointer" onClick={() => setModalTrash(true)}><FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" /></button>
                 </div>
 
                 
@@ -87,50 +80,25 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-            {modalOpenEdit && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"onClick={ShowModalEdit}></div>
-
-                    <div className="relative bg-white w-[50%] max-w-[600px] min-w-[300px] p-6 rounded-xl shadow-xl z-50">
-                    <button onClick={ShowModalEdit} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
-                        <FontAwesomeIcon icon={faClose} />
-                    </button>
-                    <div className="text-black">
-                        <h2 className="text-xl font-bold mb-4">{nome}</h2>
-                        <div className="">
-
-                        </div>
-                    </div>
-                    </div>
-                </div>
+            {modalEdit && (
+                <ModalEdit
+                id={id}
+                nome={nome}
+                sexo={sexo}
+                telefone={telefone}
+                comunidades={comunidades}
+                tamTunica={tamTunica}
+                comentario={comentario}
+                setOpen={setModalEdit}
+                />
             )}
 
-            {modalOpenTrash && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"onClick={ShowModalTrash}></div>
-
-                    <div className="relative bg-white w-[50%] max-w-[600px] min-w-[300px] p-6 rounded-xl shadow-xl z-50">
-                    <button onClick={ShowModalTrash} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
-                        <FontAwesomeIcon icon={faClose} />
-                    </button>
-                    <div className="text-black">
-                        <h2 className="text-xl font-bold mb-4">{nome}</h2>
-                        <p>Aqui vai o conteúdo do modal.</p>
-                    </div>
-                    </div>
-                </div>
+            {modalTrash && (
+                <ModalTrash 
+                id={id}
+                nome={nome}
+                setOpen={setModalTrash}
+                />
             )}
         </>
     );

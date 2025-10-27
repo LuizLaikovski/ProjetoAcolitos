@@ -43,40 +43,46 @@ const Form = ({setAcolitos}: FormProp) => {
     };
 
     const handleChangeNew = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
 
-        setFormData((prevState) => {
-            if (type === "checkbox" && name === "missasNew") {
+    setFormData((prevState) => {
+        // caso seja checkbox
+        if (type === "checkbox" && name === "missasNew") {
+            const input = e.target as HTMLInputElement; // 👈 garante que é input
             const numericValue = Number(value);
 
-                if (checked) {
-                    return {
-                    ...prevState,
-                    missasNew: [...prevState.missasNew, numericValue],
-                    };
-                } else {
-                    return {
-                    ...prevState,
-                    missasNew: prevState.missasNew.filter((missa) => missa !== numericValue),
-                    };
-                }
-            } else if (name === "comunidadeNew") {
-                // sempre sobrescreve com apenas 1 valor no array
+            if (input.checked) {
                 return {
                     ...prevState,
-                    comunidadeNew: [Number(value)],
+                    missasNew: [...prevState.missasNew, numericValue],
                 };
             } else {
                 return {
                     ...prevState,
-                    [name]:
-                    name === "cerimonialistaNew" || name === "age"
-                        ? Number(value)
-                        : value,
+                    missasNew: prevState.missasNew.filter((missa) => missa !== numericValue),
                 };
             }
-        });
+        }
+
+        // caso seja select
+        if (name === "comunidadeNew") {
+            return {
+                ...prevState,
+                comunidadeNew: [Number(value)],
+            };
+        }
+
+        // padrão para os outros campos
+        return {
+            ...prevState,
+            [name]:
+                name === "cerimonialistaNew" || name === "age"
+                    ? Number(value)
+                    : value,
+        };
+    });
     };
+
 
     const handleSubmitSearch = async (e: React.FormEvent) => {
         try {
