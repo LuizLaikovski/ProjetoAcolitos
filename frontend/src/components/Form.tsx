@@ -7,7 +7,7 @@ interface FormProp {
     setAcolitos: React.Dispatch<React.SetStateAction<AcolitoProp[]>>;
 }
 
-const Form = ({setAcolitos}: FormProp) => {
+const Form = ({ setAcolitos }: FormProp) => {
     const [formDataSearch, setFormDataSearch] = useState({
         idade: '',
         sexo: '',
@@ -43,46 +43,76 @@ const Form = ({setAcolitos}: FormProp) => {
     };
 
     const handleChangeNew = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
+        const { name, value, type } = e.target;
 
-    setFormData((prevState) => {
-        // caso seja checkbox
-        if (type === "checkbox" && name === "missasNew") {
-            const input = e.target as HTMLInputElement; // 👈 garante que é input
-            const numericValue = Number(value);
+        setFormData((prevState) => {
+            // caso seja checkbox
+            if (type === "checkbox" && name === "missasNew") {
+                const input = e.target as HTMLInputElement; // 👈 garante que é input
+                const numericValue = Number(value);
 
-            if (input.checked) {
+                if (input.checked) {
+                    return {
+                        ...prevState,
+                        missasNew: [...prevState.missasNew, numericValue],
+                    };
+                } else {
+                    return {
+                        ...prevState,
+                        missasNew: prevState.missasNew.filter((missa) => missa !== numericValue),
+                    };
+                }
+            }
+
+            // caso seja select
+            if (name === "comunidadeNew") {
                 return {
                     ...prevState,
-                    missasNew: [...prevState.missasNew, numericValue],
-                };
-            } else {
-                return {
-                    ...prevState,
-                    missasNew: prevState.missasNew.filter((missa) => missa !== numericValue),
+                    comunidadeNew: [Number(value)],
                 };
             }
-        }
 
-        // caso seja select
-        if (name === "comunidadeNew") {
+            // padrão para os outros campos
             return {
                 ...prevState,
-                comunidadeNew: [Number(value)],
+                [name]:
+                    name === "cerimonialistaNew" || name === "age"
+                        ? Number(value)
+                        : value,
             };
-        }
-
-        // padrão para os outros campos
-        return {
-            ...prevState,
-            [name]:
-                name === "cerimonialistaNew" || name === "age"
-                    ? Number(value)
-                    : value,
-        };
-    });
+        });
     };
 
+
+    const handleClearFilters = async () => {
+        try {
+            // Limpar os campos do formulário
+            setFormDataSearch({
+                idade: '',
+                sexo: '',
+                missas: '',
+                comunidade: '',
+                cerimonialista: ''
+            });
+
+            // Buscar todos os acólitos novamente
+            const response = await fetch(`${api_url}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.status);
+            }
+
+            const data = await response.json();
+            setAcolitos(data);
+        } catch (error) {
+            console.error('Erro ao limpar filtros:', error);
+        }
+    };
 
     const handleSubmitSearch = async (e: React.FormEvent) => {
         try {
@@ -103,13 +133,13 @@ const Form = ({setAcolitos}: FormProp) => {
             if (dataSearch.comunidades) params.append('comunidades', dataSearch.comunidades);
             if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista);
 
-            const response  = await fetch(`${api_url}search?${params.toString()}`, {
+            const response = await fetch(`${api_url}search?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            
+
 
             if (!response.ok) {
                 throw new Error('Erro na requisição: ' + response.status);
@@ -138,8 +168,8 @@ const Form = ({setAcolitos}: FormProp) => {
                 comunidades: formData.comunidadeNew,
                 missas: formData.missasNew
             }
-        
-            const response  = await fetch(`${api_url}newAcolito`, {
+
+            const response = await fetch(`${api_url}newAcolito`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,12 +206,12 @@ const Form = ({setAcolitos}: FormProp) => {
                     <div>
                         <label htmlFor="age" className="text-blue-400">Idade:</label>
                         <input
-                        type="number"
-                        id="idade"
-                        name="idade"
-                        value={formDataSearch.idade}
-                        onChange={handleChange}
-                        className="border-blue-300 bg-blue-100 border-2 rounded-md p-2 w-full" />
+                            type="number"
+                            id="idade"
+                            name="idade"
+                            value={formDataSearch.idade}
+                            onChange={handleChange}
+                            className="border-blue-300 bg-blue-100 border-2 rounded-md p-2 w-full" />
                     </div>
                     <div>
                         <label htmlFor="sexo" className="text-purple-400">Sexo:</label>
@@ -199,11 +229,11 @@ const Form = ({setAcolitos}: FormProp) => {
                     <div>
                         <label htmlFor="missas" className="text-yellow-500">Disponibilidade:</label>
                         <select
-                        id="missas"
-                        name="missas"
-                        value={formDataSearch.missas}
-                        onChange={handleChange}
-                        className="border-2 border-yellow-400 bg-yellow-100 text-yellow-500 rounded-md p-2 w-full">
+                            id="missas"
+                            name="missas"
+                            value={formDataSearch.missas}
+                            onChange={handleChange}
+                            className="border-2 border-yellow-400 bg-yellow-100 text-yellow-500 rounded-md p-2 w-full">
                             <option value="" disabled selected>Selecione</option>
                             <option value="Sabado">Sabádos 19:30</option>
                             <option value="Domingo 8h">Domingos 8h</option>
@@ -215,41 +245,49 @@ const Form = ({setAcolitos}: FormProp) => {
                     <div>
                         <label htmlFor="comunidade" className="text-red-500">Comunidade:</label>
                         <select
-                        id="comunidade"
-                        name="comunidade"
-                        value={formDataSearch.comunidade}
-                        onChange={handleChange}
-                        className="border-red-400 text-red-400 bg-red-100 border-2 rounded-md p-2 w-full">
-                                <option value="" disabled selected>Selecione</option>
-                                <option value="Matriz">Matriz</option>
-                                <option value="São Miguel Arcanjo">São Miguel Arcanjo</option>
-                                <option value="Nossa Senhora de Fátima">Nossa Senhora de Fátima</option>
-                                <option value="Santa Paulina">Santa Paulina</option>
-                                <option value="São Domingos Savio">São Domingos Sávio</option>
-                                <option value="São Joao Batista">São João Batista</option>
-                                <option value="Nossa Senhora Aparecida">Nossa Senhora Aparecida</option>
+                            id="comunidade"
+                            name="comunidade"
+                            value={formDataSearch.comunidade}
+                            onChange={handleChange}
+                            className="border-red-400 text-red-400 bg-red-100 border-2 rounded-md p-2 w-full">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Matriz">Matriz</option>
+                            <option value="São Miguel Arcanjo">São Miguel Arcanjo</option>
+                            <option value="Nossa Senhora de Fátima">Nossa Senhora de Fátima</option>
+                            <option value="Santa Paulina">Santa Paulina</option>
+                            <option value="São Domingos Savio">São Domingos Sávio</option>
+                            <option value="São Joao Batista">São João Batista</option>
+                            <option value="Nossa Senhora Aparecida">Nossa Senhora Aparecida</option>
                         </select>
                     </div>
                     <div>
                         <label htmlFor="cerimonialista" className="text-green-500">cerimonialista</label>
                         <select
-                        id="cerimonialista"
-                        name="cerimonialista"
-                        value={formDataSearch.cerimonialista}
-                        onChange={handleChange}
-                        className="border-green-400 text-green-400 bg-green-100 border-2 rounded-md p-2 w-full">
-                                <option value="" disabled selected>Selecione</option>
-                                <option value="true">Sim</option>
-                                <option value="false">Não</option>
+                            id="cerimonialista"
+                            name="cerimonialista"
+                            value={formDataSearch.cerimonialista}
+                            onChange={handleChange}
+                            className="border-green-400 text-green-400 bg-green-100 border-2 rounded-md p-2 w-full">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
                         </select>
                     </div>
                     <div>
                         <label htmlFor="submit" className="invisible">Submit</label>
                         <button
-                        id="submit"
-                        type="submit"
-                        className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">
+                            id="submit"
+                            type="submit"
+                            className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">
                             Buscar
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            type="button"
+                            onClick={handleClearFilters}
+                            className="cursor-pointer bg-red-500 text-white rounded-md p-2 w-full hover:bg-red-600 transition-colors">
+                            Limpar Filtros
                         </button>
                     </div>
                 </div>
@@ -264,29 +302,29 @@ const Form = ({setAcolitos}: FormProp) => {
                         <button onClick={openModalNew} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
                             <FontAwesomeIcon icon={faClose} />
                         </button>
-                            <h2 className="text-2xl font-bold mb-4">Adicionar Novo Acólito/Ancilia</h2>
+                        <h2 className="text-2xl font-bold mb-4">Adicionar Novo Acólito/Ancilia</h2>
                         <form onSubmit={handleSubmitNew} className="">
                             <div className="grid grid-cols-2 gap-4 mb-4">
                                 <div className="flex flex-col">
                                     <label htmlFor="name" className="text-blue-500">Nome:</label>
                                     <input
-                                    type="text"
-                                    id="nameNew"
-                                    name="nameNew"
-                                    value={formData.nameNew}
-                                    onChange={handleChangeNew}
-                                    placeholder="Nome:"
-                                    className="border-blue-200 text-blue-500 border-2 rounded-md p-2" />
+                                        type="text"
+                                        id="nameNew"
+                                        name="nameNew"
+                                        value={formData.nameNew}
+                                        onChange={handleChangeNew}
+                                        placeholder="Nome:"
+                                        className="border-blue-200 text-blue-500 border-2 rounded-md p-2" />
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="age" className="text-blue-500">Data de Nascimento:</label>
                                     <input
-                                    type="date"
-                                    id="dataNascimentoNew"
-                                    name="dataNascimentoNew"
-                                    value={formData.dataNascimentoNew}
-                                    onChange={handleChangeNew}
-                                    className="border-blue-200 text-blue-400 border-2 rounded-md p-2" />
+                                        type="date"
+                                        id="dataNascimentoNew"
+                                        name="dataNascimentoNew"
+                                        value={formData.dataNascimentoNew}
+                                        onChange={handleChangeNew}
+                                        className="border-blue-200 text-blue-400 border-2 rounded-md p-2" />
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="sexo" className="text-blue-500">Sexo:</label>
@@ -315,92 +353,92 @@ const Form = ({setAcolitos}: FormProp) => {
                                 <div className="flex flex-col">
                                     <div className="flex flex-col gap-2 p-2">
                                         <label className="text-blue-400">
-                                        <input
-                                            name="missasNew"
-                                            type="checkbox"
-                                            value="1"
-                                            checked={formData.missasNew.includes(1)}
-                                            onChange={handleChangeNew}
-                                            className="mr-2"
-                                        />
-                                        Sábados 19:30
+                                            <input
+                                                name="missasNew"
+                                                type="checkbox"
+                                                value="1"
+                                                checked={formData.missasNew.includes(1)}
+                                                onChange={handleChangeNew}
+                                                className="mr-2"
+                                            />
+                                            Sábados 19:30
                                         </label>
 
                                         <label className="text-blue-400">
-                                        <input
-                                            name="missasNew"
-                                            type="checkbox"
-                                            value="2"
-                                            checked={formData.missasNew.includes(2)}
-                                            onChange={handleChangeNew}
-                                            className="mr-2"
-                                        />
-                                        Domingos 8h
+                                            <input
+                                                name="missasNew"
+                                                type="checkbox"
+                                                value="2"
+                                                checked={formData.missasNew.includes(2)}
+                                                onChange={handleChangeNew}
+                                                className="mr-2"
+                                            />
+                                            Domingos 8h
                                         </label>
 
                                         <label className="text-blue-400">
-                                        <input
-                                            name="missasNew"
-                                            type="checkbox"
-                                            value="3"
-                                            checked={formData.missasNew.includes(3)}
-                                            onChange={handleChangeNew}
-                                            className="mr-2"
-                                        />
-                                        Domingos 18h
+                                            <input
+                                                name="missasNew"
+                                                type="checkbox"
+                                                value="3"
+                                                checked={formData.missasNew.includes(3)}
+                                                onChange={handleChangeNew}
+                                                className="mr-2"
+                                            />
+                                            Domingos 18h
                                         </label>
 
                                         <label className="text-blue-400">
-                                        <input
-                                            name="missasNew"
-                                            type="checkbox"
-                                            value="4"
-                                            checked={formData.missasNew.includes(4)}
-                                            onChange={handleChangeNew}
-                                            className="mr-2"
-                                        />
-                                        Quartas-Feiras 19:30
+                                            <input
+                                                name="missasNew"
+                                                type="checkbox"
+                                                value="4"
+                                                checked={formData.missasNew.includes(4)}
+                                                onChange={handleChangeNew}
+                                                className="mr-2"
+                                            />
+                                            Quartas-Feiras 19:30
                                         </label>
 
                                         <label className="text-blue-400">
-                                        <input
-                                            name="missasNew"
-                                            type="checkbox"
-                                            value="5"
-                                            checked={formData.missasNew.includes(5)}
-                                            onChange={handleChangeNew}
-                                            className="mr-2"
-                                        />
-                                        Comunidade(s)
+                                            <input
+                                                name="missasNew"
+                                                type="checkbox"
+                                                value="5"
+                                                checked={formData.missasNew.includes(5)}
+                                                onChange={handleChangeNew}
+                                                className="mr-2"
+                                            />
+                                            Comunidade(s)
                                         </label>
                                     </div>
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="comunidade" className="text-blue-500">Comunidade:</label>
                                     <select
-                                    id="comunidadeNew"
-                                    name="comunidadeNew"
-                                    value={formData.comunidadeNew[0] || ""}
-                                    onChange={handleChangeNew}
-                                    className="border-blue-200 text-blue-400 border-2 rounded-md p-2">
-                                            <option value="" disabled selected>Selecione</option>
-                                            <option value="1">Matriz</option>
-                                            <option value="2">São Miguel Arcanjo</option>
-                                            <option value="3">Nossa Senhora de Fátima</option>
-                                            <option value="4">Santa Paulina</option>
-                                            <option value="5">São Domingos Sávio</option>
-                                            <option value="6">São João Batista</option>
-                                            <option value="7">Nossa Senhora Aparecida</option>
+                                        id="comunidadeNew"
+                                        name="comunidadeNew"
+                                        value={formData.comunidadeNew[0] || ""}
+                                        onChange={handleChangeNew}
+                                        className="border-blue-200 text-blue-400 border-2 rounded-md p-2">
+                                        <option value="" disabled selected>Selecione</option>
+                                        <option value="1">Matriz</option>
+                                        <option value="2">São Miguel Arcanjo</option>
+                                        <option value="3">Nossa Senhora de Fátima</option>
+                                        <option value="4">Santa Paulina</option>
+                                        <option value="5">São Domingos Sávio</option>
+                                        <option value="6">São João Batista</option>
+                                        <option value="7">Nossa Senhora Aparecida</option>
                                     </select>
                                 </div>
                                 <div className="flex flex-col">
                                     <label htmlFor="tamTunica" className="text-blue-500">Tamanho de Tunica:</label>
                                     <select
-                                    name="tamTunicaNew"
-                                    id="tamTunicaNew"
-                                    value={formData.tamTunicaNew}
-                                    onChange={handleChangeNew}
-                                    className="border-blue-200 text-blue-400 border-2 rounded-md p-2">
+                                        name="tamTunicaNew"
+                                        id="tamTunicaNew"
+                                        value={formData.tamTunicaNew}
+                                        onChange={handleChangeNew}
+                                        className="border-blue-200 text-blue-400 border-2 rounded-md p-2">
                                         <option value="" disabled selected>Tamanho de Túnica</option>
                                         <option value="42">42</option>
                                         <option value="P">P</option>
@@ -411,11 +449,11 @@ const Form = ({setAcolitos}: FormProp) => {
                                 <div className="flex flex-col">
                                     <label htmlFor="outros" className="text-blue-500">cerimonialista:</label>
                                     <select
-                                    name="cerimonialistaNew"
-                                    id="cerimonialistaNew"
-                                    value={formData.cerimonialistaNew}
-                                    onChange={handleChangeNew}
-                                    className="border-blue-200 text-blue-400 border-2 rounded-md p-2">
+                                        name="cerimonialistaNew"
+                                        id="cerimonialistaNew"
+                                        value={formData.cerimonialistaNew}
+                                        onChange={handleChangeNew}
+                                        className="border-blue-200 text-blue-400 border-2 rounded-md p-2">
                                         <option value="" disabled selected>Tamanho de Túnica</option>
                                         <option value={1}>Sim</option>
                                         <option value={0}>Não</option>
@@ -426,13 +464,13 @@ const Form = ({setAcolitos}: FormProp) => {
                                 <h3 className="p-2 font-bold">Comentários:</h3>
                             </div>
                             <input
-                            type="text"
-                            name="comentarioNew"
-                            id="comentarioNew"
-                            value={formData.comentarioNew}
-                            onChange={handleChangeNew}
-                            placeholder="Comentários:"
-                            className="border-2 w-full h-[100px] text-green-500 rounded-b-2xl border-green-300 p-1.5" />
+                                type="text"
+                                name="comentarioNew"
+                                id="comentarioNew"
+                                value={formData.comentarioNew}
+                                onChange={handleChangeNew}
+                                placeholder="Comentários:"
+                                className="border-2 w-full h-[100px] text-green-500 rounded-b-2xl border-green-300 p-1.5" />
                             <div>
                                 <label htmlFor="submitNew" className="invisible">Submit</label>
                                 <button id="submitNew" type="submit" className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">Adicionar</button>
@@ -441,6 +479,9 @@ const Form = ({setAcolitos}: FormProp) => {
                     </div>
                 </div>
             )}
+
+
+
         </>
     )
 }
