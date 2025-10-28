@@ -40,7 +40,7 @@ const LoginScreen = () => {
     return (
         <>
             <main className="bg-gray-200 flex min-h-screen items-center justify-center p-4">
-                <div className="h-[55dvh] w-[30dvw] text-center flex flex-col justify-center items-center border-2 border-gray-300 p-8 rounded-lg bg-white shadow-lg space-y-4">
+                <div className="containerLogin h-[55dvh] w-[30dvw] text-center flex flex-col justify-center items-center border-2 border-gray-300 p-8 rounded-lg bg-white shadow-lg space-y-4">
                     <h1 className="text-3xl mb-10">ACOLITOS SÃO JOSÉ OPERÁRIO</h1>
                     <input
                     type="text"
@@ -58,7 +58,7 @@ const LoginScreen = () => {
 
 
                     {erro && <p className="text-red-500">{erro}</p>}
-                    <button onClick={handleLogin} className="border-black-900; border-2 p-2 rounded-md w-[20dvw] text-2xl transition hover:bg-gray-200">Entar</button>
+                    <button onClick={handleLogin} className="border-black-900; border-2 p-2 rounded-md w-[20dvw] text-2xl transition hover:bg-gray-200">Entrar</button>
                 </div>
             </main>
         </>

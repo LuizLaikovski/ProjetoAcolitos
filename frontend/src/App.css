@@ -24,4 +24,16 @@
     .allignInputs {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .containerLogin {
+        width: 90dvw;
+    }
+
+    .containerLogin input {
+        width: 100%;
+    }
+
+    .containerLogin button {
+        width: 100%;
+    }
 }
