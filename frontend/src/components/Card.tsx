@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import ModalEdit from "./ModalEdit";
 import ModalTrash from "./ModalTrash";
+import "./css/card.css";
 
 interface CardProp {
     id: number,
@@ -25,7 +26,7 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
     const [modalTrash, setModalTrash] = useState(false);
     return (
         <>
-            <div key={id} className="box h-auto w-[25dvw] rounded-lg p-5 shadow-2xl bg-white">
+            <div key={id} className="box h-auto w-full sm:w-[25dvw] md:w-[30dvw] lg:w-[25dvw] rounded-lg p-5 shadow-2xl bg-white">
                 <div className="flex items-center mb-2">
                     <h2 className="text-2xl font-bold">{nome}</h2>
                 </div>
@@ -57,7 +58,7 @@ const Card = ({ id, nome, sexo, idade, telefone, tamTunica, comunidades, missas,
                         {missas}
                     </div>
 
-                    <div className="w-[20dvw] bg-blue-100 opacity-70 ml-[1.5dvw] mt-3 h-[16.5dvh] rounded-2xl p-3">
+                    <div className="w-[20dvw] bg-blue-100 opacity-70 ml-[1.5dvw] mt-3 h-[16.5dvh] rounded-2xl p-3 comentario">
                         <h4 className="text-blue-600">Observações:</h4>
                         <p className="text-[13px] text-blue-600">{comentario || "Nenhuma observação disponível."}</p>
                     </div>

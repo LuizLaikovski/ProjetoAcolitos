@@ -1,0 +1,10 @@
+@media (max-width: 430px) {
+    .acolitos {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .comentario {
+        width: 66dvw;
+    }
+}
+

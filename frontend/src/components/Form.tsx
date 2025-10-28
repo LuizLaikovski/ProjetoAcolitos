@@ -166,12 +166,13 @@ const Form = ({setAcolitos}: FormProp) => {
 
     return (
         <>
-            <form onSubmit={handleSubmitSearch} className="w-[75dvw] h-auto bg-white rounded-2xl p-6 shadow-lg mt-10 mb-10 flex flex-col items-center">
-                <div className="w-full h-[9dvh] flex justify-between items-center border-b-2 border-gray-200">
+            <form onSubmit={handleSubmitSearch} className="form w-[75dvw] h-auto bg-white rounded-2xl p-6 shadow-lg mt-10 mb-10 flex flex-col items-center">
+                <div className="w-full h-[9dvh] flex justify-between items-center">
                     <h1 className="text-3xl font-bold">Busca de Acolitos:</h1>
-                    <button onClick={openModalNew} className="p-3 border-1 rounded-xl w-full xl:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">Adicionar Novo Acólito/Ancilia</button>
+                    <button onClick={openModalNew} className="buttonAdd p-3 border-1 rounded-xl w-full xl:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">Adicionar Novo Acólito/Ancilia</button>
                 </div>
-                <div className="grid grid-cols-6 gap-4 w-full mt-6">
+                <div className="w-full h-[0.5px] border-2 border-gray-200 mt-5"></div>
+                <div className="allignInputs grid grid-cols-6 gap-4 w-full mt-6">
                     <div>
                         <label htmlFor="age" className="text-blue-400">Idade:</label>
                         <input

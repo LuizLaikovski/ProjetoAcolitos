@@ -45,7 +45,7 @@ const Acolitos = () => {
     return (
         <>
             <Form setAcolitos={setAcolito} />
-            <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8">
+            <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8 acolitos">
                 {acolito.length > 0 ? (
                     acolito.map((item) =>
                         <Card 

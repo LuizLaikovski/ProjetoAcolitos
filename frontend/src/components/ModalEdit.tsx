@@ -85,7 +85,7 @@ const ModalEdit: React.FC<ModalEditAcolitoProps> = ({id,nome,telefone,tamTunica,
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}></div>
-        <div className="relative bg-white w-[50%] max-w-[600px] p-6 rounded-xl shadow-xl z-50">
+        <div className="containerEdit relative bg-white w-[50%] max-w-[600px] p-6 rounded-xl shadow-xl z-50">
             <button onClick={() => setOpen(false)} className="absolute top-3 right-3">
             <FontAwesomeIcon icon={faClose} />
             </button>

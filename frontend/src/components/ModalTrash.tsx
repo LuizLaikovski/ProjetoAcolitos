@@ -26,7 +26,7 @@ const ModalTrash: React.FC<ModalDeleteAcolitoProps> = ({ id, nome, setOpen }) =>
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}></div>
-            <div className="relative bg-white w-[50%] max-w-[500px] p-6 rounded-xl shadow-xl z-50 text-center">
+            <div className="containerTrash relative bg-white w-[50%] max-w-[500px] p-6 rounded-xl shadow-xl z-50 text-center">
                 <button onClick={() => setOpen(false)} className="absolute top-3 right-3">
                     <FontAwesomeIcon icon={faClose} />
                 </button>

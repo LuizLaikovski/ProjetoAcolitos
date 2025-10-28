@@ -1,0 +1,27 @@
+@media (max-width: 430px) {
+    .containerEdit {
+        width: 80dvw;
+    }
+
+    .containerTrash {
+        width: 80dvw;
+    }
+
+    .form {
+        width: 85dvw;
+        height: 55dvh;
+    }
+
+    .form h1 {
+        font-size: 20px;
+    }
+
+    .buttonAdd {
+        height: 8dvh;
+        font-size: 13px;
+    }
+
+    .allignInputs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

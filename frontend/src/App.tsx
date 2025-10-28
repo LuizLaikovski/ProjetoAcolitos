@@ -1,4 +1,5 @@
 import Acolitos from "./components/Acolitos";
+import "./App.css";
 
 export interface AcolitoProp {
     id: number;
