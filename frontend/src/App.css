@@ -36,4 +36,49 @@
     .containerLogin button {
         width: 100%;
     }
+
+    /* Modal de adicionar acólito */
+    .modalAddAcolito {
+        width: 95dvw !important;
+        max-width: 95dvw !important;
+        padding: 1rem !important;
+        max-height: 95vh !important;
+    }
+
+    .modalAddAcolito h2 {
+        font-size: 1.25rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    .modalAddAcolito .grid-form-modal {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .modalAddAcolito .grid-form-modal>div {
+        width: 100% !important;
+    }
+
+    .modalAddAcolito input,
+    .modalAddAcolito select {
+        font-size: 14px;
+        padding: 0.5rem;
+    }
+
+    .modalAddAcolito button[type="submit"] {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    /* Garantir que checkbox não quebre layout */
+    .modalAddAcolito .flex-col .flex-col {
+        padding: 0.5rem !important;
+        gap: 0.5rem !important;
+    }
+
+    .modalAddAcolito .flex-col .flex-col label {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+    }
 }

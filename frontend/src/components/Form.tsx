@@ -295,16 +295,18 @@ const Form = ({ setAcolitos }: FormProp) => {
 
 
             {modalOpenNew && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={openModalNew}></div>
 
-                    <div className="relative bg-white w-[80dvw] max-w-[600px] min-w-[300px] p-6 rounded-xl shadow-xl z-50">
-                        <button onClick={openModalNew} className="absolute top-3 right-3 bg-white px-3 py-1 cursor-pointer">
-                            <FontAwesomeIcon icon={faClose} />
-                        </button>
-                        <h2 className="text-2xl font-bold mb-4">Adicionar Novo Acólito/Ancilia</h2>
+                    <div className="modalAddAcolito relative bg-white w-[80dvw] max-w-[600px] min-w-[300px] max-h-[90vh] p-6 rounded-xl shadow-xl z-50 overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Adicionar Novo Acólito/Ancilia</h2>
+                            <button onClick={openModalNew} className="bg-white px-3 py-1 cursor-pointer hover:bg-gray-100 rounded">
+                                <FontAwesomeIcon icon={faClose} />
+                            </button>
+                        </div>
                         <form onSubmit={handleSubmitNew} className="">
-                            <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div className="grid-form-modal grid grid-cols-2 gap-4 mb-4">
                                 <div className="flex flex-col">
                                     <label htmlFor="name" className="text-blue-500">Nome:</label>
                                     <input
