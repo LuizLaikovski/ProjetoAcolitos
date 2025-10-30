@@ -10,7 +10,7 @@ export default function LoginScreen() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-        const res = await axios.post("http://localhost:8800/login", { user, password });
+        const res = await axios.post("https://projeto-acolitos-back.vercel.app/login", { user, password });
         if (res.data.access) {
             localStorage.setItem("token", res.data.token);
             navigate("/home");

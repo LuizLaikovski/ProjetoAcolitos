@@ -26,14 +26,23 @@ const Acolitos = () => {
     useEffect(() => {
         const fetchAcolito = async () => {
             try {
-                const response = await fetch(`${api_url}`);
+                const token = localStorage.getItem("token");
+
+                const response = await fetch(`${api_url}`,{
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    }
+                });
                 const data = await response.json();
+                console.log(data);
                 
                 const acolitosComIdade = data.map((item: AcolitoProp) => ({
                     ...item,
                     idade: item.dataNascimento ? calcularIdade(item.dataNascimento) : 0
                 }));
-                
+
+                console.log(acolitosComIdade);
                 setAcolito(acolitosComIdade);
             } catch (error) {
                 console.error("Erro ao buscar acólitos:", error);
@@ -64,7 +73,7 @@ const Acolitos = () => {
                     )
                 ) : (
                     <p className="text-gray-500 text-lg mt-4">
-                        Nenhum acólito encontrado com os filtros selecionados.
+                        Nenhum acólito encontrado.
                     </p>
                 )}
             </div>
