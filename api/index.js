@@ -1,16 +1,16 @@
 import express from "express";
 import cors from "cors";
-import acolitosRoutes from './routes/acolitos.js';
+import acolitosRoutes from "./routes/acolitos.js"; // mesmo nome do arquivo!
 
 const app = express();
-
 const port = 8800;
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-app.use('/', acolitosRoutes);
+// Prefixo opcional
+app.use("/", acolitosRoutes);
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`🚀 Servidor rodando em http://localhost:${port}`);
 });

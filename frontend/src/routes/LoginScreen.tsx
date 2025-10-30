@@ -1,68 +1,38 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const LoginScreen = () => {
-    const [user, setUser] = useState('');
-    const [password, setPassword] = useState('');
-    const [erro, setErro] = useState('');
+export default function LoginScreen() {
+    const [user, setUser] = useState("");
+    const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const api_url = import.meta.env.VITE_API_URL;
 
-    const handleLogin = async () => {
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
-            if (!user || !password) {
-                setErro('Por favor, preencha todos os campos');
-                return;
-            }
-
-            const response = await fetch(`${api_url}usersAcess`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ user, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.access) {
-                setErro('');
-                navigate('/home');
-            } else {
-                setErro(data.error || 'Usuário ou senha incorretos');
-            }
-        } catch (error) {
-            console.error('Erro ao conectar ao servidor:', error);
-            setErro('Erro ao conectar ao servidor');
+        const res = await axios.post("http://localhost:8800/login", { user, password });
+        if (res.data.access) {
+            localStorage.setItem("token", res.data.token);
+            navigate("/home");
+        } else {
+            alert("Usuário ou senha incorretos!");
         }
-    }
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao conectar ao servidor!");
+        }
+    };
 
     return (
         <>
             <main className="bg-gray-200 flex min-h-screen items-center justify-center p-4">
-                <div className="containerLogin h-[55dvh] w-[30dvw] text-center flex flex-col justify-center items-center border-2 border-gray-300 p-8 rounded-lg bg-white shadow-lg space-y-4">
+                <form onSubmit={handleLogin} className="containerLogin h-[55dvh] w-[30dvw] text-center flex flex-col justify-center items-center border-2 border-gray-300 p-8 rounded-lg bg-white shadow-lg space-y-4">
                     <h1 className="text-3xl mb-10">ACOLITOS SÃO JOSÉ OPERÁRIO</h1>
-                    <input
-                    type="text"
-                    placeholder="Usuário"
-                    className="border-blue-200 bg-blue-50 border-2 p-2 rounded-md w-[20dvw] text-xl text-center"
-                    value={user}
-                    onChange={(e) => setUser(e.target.value)}/>
-                    
-                    <input 
-                    type="password" 
-                    placeholder="Senha"
-                    className="border-blue-200 bg-blue-50 border-2 p-2 rounded-md w-[20dvw] text-xl text-center" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}/>
-
-
-                    {erro && <p className="text-red-500">{erro}</p>}
-                    <button onClick={handleLogin} className="border-black-900; border-2 p-2 rounded-md w-[20dvw] text-2xl transition hover:bg-gray-200">Entrar</button>
-                </div>
+                    <input value={user} onChange={e => setUser(e.target.value)} placeholder="Usuário" className="border-blue-200 bg-blue-50 border-2 p-2 rounded-md w-[20dvw] text-xl text-center" />
+                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Senha" className="border-blue-200 bg-blue-50 border-2 p-2 rounded-md w-[20dvw] text-xl text-center"  />
+                    <button type="submit" className="border-black-900; border-2 p-2 rounded-md w-[20dvw] text-2xl transition hover:bg-gray-200">Entrar</button>
+                </form>
             </main>
         </>
     );
-};
-
-export default LoginScreen;
+}
