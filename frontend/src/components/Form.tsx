@@ -8,6 +8,7 @@ interface FormProp {
 }
 
 const Form = ({ setAcolitos }: FormProp) => {
+    const token = localStorage.getItem("token");
     const [formDataSearch, setFormDataSearch] = useState({
         idade: '',
         sexo: '',
@@ -137,6 +138,7 @@ const Form = ({ setAcolitos }: FormProp) => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
                 },
             });
 
@@ -146,7 +148,6 @@ const Form = ({ setAcolitos }: FormProp) => {
             }
 
             const data = await response.json();
-            console.log("Acolito pesquisado: ", data);
             setAcolitos(data);
         } catch (error) {
             console.error('Erro ao procurar acolito:', error);
@@ -173,6 +174,7 @@ const Form = ({ setAcolitos }: FormProp) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(dataInsert),
             });

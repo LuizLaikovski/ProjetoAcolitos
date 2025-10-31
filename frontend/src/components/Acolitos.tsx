@@ -22,12 +22,12 @@ const calcularIdade = (dataNascimento: string): number => {
 const Acolitos = () => {
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
     const api_url = import.meta.env.VITE_API_URL;
-
+    
     useEffect(() => {
         const fetchAcolito = async () => {
             try {
+                
                 const token = localStorage.getItem("token");
-
                 const response = await fetch(`${api_url}`,{
                     headers: {
                         "Content-Type": "application/json",
@@ -35,14 +35,10 @@ const Acolitos = () => {
                     }
                 });
                 const data = await response.json();
-                console.log(data);
-                
                 const acolitosComIdade = data.map((item: AcolitoProp) => ({
                     ...item,
                     idade: item.dataNascimento ? calcularIdade(item.dataNascimento) : 0
                 }));
-
-                console.log(acolitosComIdade);
                 setAcolito(acolitosComIdade);
             } catch (error) {
                 console.error("Erro ao buscar acólitos:", error);
@@ -56,19 +52,19 @@ const Acolitos = () => {
             <Form setAcolitos={setAcolito} />
             <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8 acolitos">
                 {acolito.length > 0 ? (
-                    acolito.map((item) =>
-                        <Card 
-                            key={item.id}
-                            nome={item.nome}
-                            id={item.id}
-                            sexo={item.sexo}
-                            idade={item.idade} // Agora com a idade calculada
-                            telefone={item.telefone}
-                            tamTunica={item.tamTunica}
-                            comunidades={item.comunidades}
-                            missas={item.missas}
-                            cerimonialista={item.cerimonialista}
-                            comentario={item.comentario} 
+                    acolito.map((a) =>
+                        <Card
+                            key={a.idAcolitos}
+                            idAcolitos={a.idAcolitos}
+                            nome={a.nome}
+                            sexo={a.sexo}
+                            idade={a.idade}
+                            telefone={a.telefone}
+                            tamTunica={a.tamTunica}
+                            comunidades={a.comunidades}
+                            missas={a.missas}
+                            cerimonialista={a.cerimonialista}
+                            comentario={a.comentario} 
                         />
                     )
                 ) : (

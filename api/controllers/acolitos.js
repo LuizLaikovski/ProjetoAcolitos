@@ -272,6 +272,7 @@ export const updateAcolito = (req, res) => {
 export const deleteAcolito = (req, res) => {
   const { id } = req.params;
 
+  console.log("Recebendo DELETE de acolito:", id);
   db.query("DELETE FROM acolitos_comunidades WHERE idAcolito = ?", [id]);
   db.query("DELETE FROM acolitos_missas WHERE idAcolito = ?", [id]);
 

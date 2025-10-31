@@ -15,6 +15,7 @@ interface ModalEditAcolitoProps {
 
 const ModalEdit: React.FC<ModalEditAcolitoProps> = ({id,nome,telefone,tamTunica,comentario,setOpen,}) => {
     const api_url = import.meta.env.VITE_API_URL;
+    const token = localStorage.getItem("token")
 
     const [formData, setFormData] = useState({
         name: "",
@@ -68,7 +69,7 @@ const ModalEdit: React.FC<ModalEditAcolitoProps> = ({id,nome,telefone,tamTunica,
 
         const response = await fetch(`${api_url}update/${id}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
             body: JSON.stringify(dataInsert),
         });
 
@@ -77,8 +78,8 @@ const ModalEdit: React.FC<ModalEditAcolitoProps> = ({id,nome,telefone,tamTunica,
         } catch (err) {
         console.error("Erro ao editar acolito:", err);
         } finally {
-        setOpen(false);
-        location.reload();
+            setOpen(false);
+            location.reload()
         }
     };
 
