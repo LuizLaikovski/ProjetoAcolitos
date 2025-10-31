@@ -74,7 +74,6 @@ const ModalEdit: React.FC<ModalEditAcolitoProps> = ({id,nome,telefone,tamTunica,
         });
 
         if (!response.ok) throw  Error(`Erro: ${response.status}`);
-        console.log("Acolito editado com sucesso!");
         } catch (err) {
         console.error("Erro ao editar acolito:", err);
         } finally {
