@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ErrorPage from './routes/ErrorPage.tsx'
 import LoginScreen from './routes/LoginScreen.tsx'
+import VisitorsPage from './routes/VisitorsPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <App />
+    element: <App canEdit={true}/>
+  },
+  {
+    path: "/visitors",
+    element: <VisitorsPage canEdit={false}/>
   },
   {
     path: "*",

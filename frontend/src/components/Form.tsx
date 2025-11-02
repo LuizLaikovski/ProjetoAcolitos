@@ -5,9 +5,10 @@ import type { AcolitoProp } from "../App";
 
 interface FormProp {
     setAcolitos: React.Dispatch<React.SetStateAction<AcolitoProp[]>>;
+    canEdit: boolean;
 }
 
-const Form = ({ setAcolitos }: FormProp) => {
+const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
     const token = localStorage.getItem("token");
     const [formDataSearch, setFormDataSearch] = useState({
         idade: '',
@@ -201,7 +202,9 @@ const Form = ({ setAcolitos }: FormProp) => {
             <form onSubmit={handleSubmitSearch} className="form w-[75dvw] h-auto bg-white rounded-2xl p-6 shadow-lg mt-10 mb-10 flex flex-col items-center">
                 <div className="w-full h-[9dvh] flex justify-between items-center">
                     <h1 className="text-3xl font-bold">Busca de Acolitos:</h1>
-                    <button onClick={openModalNew} className="buttonAdd p-3 rounded-xl w-full xl:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">Adicionar Novo Acólito/Ancilia</button>
+                    {canEdit && (
+                        <button onClick={openModalNew} className="buttonAdd p-3 rounded-xl w-full xl:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">Adicionar Novo Acólito/Ancilia</button>
+                    )}
                 </div>
                 <div className="w-full h-[0.5px] border-2 border-gray-200 mt-5"></div>
                 <div className="allignInputs grid grid-cols-6 gap-4 w-full mt-6">
@@ -296,7 +299,7 @@ const Form = ({ setAcolitos }: FormProp) => {
             </form>
 
 
-            {modalOpenNew && (
+            {canEdit &&modalOpenNew && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={openModalNew}></div>
 

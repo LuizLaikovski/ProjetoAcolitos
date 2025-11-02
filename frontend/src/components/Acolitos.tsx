@@ -26,7 +26,13 @@ const calcularIdade = (dataNascimento: string): number => {
     return idade;
 };
 
-const Acolitos = () => {
+interface AcolitosProps {
+    canEdit: boolean;
+}
+
+const Acolitos = ({canEdit}: AcolitosProps) => {
+    
+
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
     const api_url = import.meta.env.VITE_API_URL;
     
@@ -56,7 +62,7 @@ const Acolitos = () => {
 
     return (
         <>
-            <Form setAcolitos={setAcolito} />
+            <Form setAcolitos={setAcolito} canEdit={canEdit} />
             <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8 acolitos">
                 {acolito.length > 0 ? (
                     acolito.map((a) =>
@@ -71,7 +77,8 @@ const Acolitos = () => {
                             comunidades={a.comunidades}
                             missas={a.missas}
                             cerimonialista={a.cerimonialista}
-                            comentario={a.comentario} 
+                            comentario={a.comentario}
+                            canEdit={canEdit}
                         />
                     )
                 ) : (

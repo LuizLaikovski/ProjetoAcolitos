@@ -17,6 +17,7 @@ interface CardProp {
     missas: string[];
     cerimonialista: boolean;
     comentario: string;
+    canEdit?: boolean; // 🔹 adiciona aqui
 }
 
 const Card: React.FC<CardProp> = ({
@@ -29,7 +30,8 @@ const Card: React.FC<CardProp> = ({
     comunidades,
     missas,
     cerimonialista,
-    comentario
+    comentario,
+    canEdit = true // 🔹 padrão: pode editar
 }) => {
     const [modalEdit, setModalEdit] = useState(false);
     const [modalTrash, setModalTrash] = useState(false);
@@ -50,17 +52,20 @@ const Card: React.FC<CardProp> = ({
                         {idade} anos
                     </p>
 
-                    <button className="cursor-pointer" onClick={() => setModalEdit(true)}>
-                        <FontAwesomeIcon icon={faPencil} color="blue" size="xl" />
-                    </button>
+                    {canEdit && (
+                        <>
+                            <button className="cursor-pointer" onClick={() => setModalEdit(true)}>
+                                <FontAwesomeIcon icon={faPencil} color="blue" size="xl" />
+                            </button>
 
-                    <button className="cursor-pointer" onClick={() => setModalTrash(true)}>
-                        <FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" />
-                    </button>
+                            <button className="cursor-pointer" onClick={() => setModalTrash(true)}>
+                                <FontAwesomeIcon icon={faTrashAlt} color="red" className="ml-3" size="xl" />
+                            </button>
+                        </>
+                    )}
                 </div>
 
                 <ul className="mt-4">
-
                     {cerimonialista ? (
                         <li className="px-3 w-[13ch] py-1 font-bold text-green-900 rounded-xl bg-green-400">
                             Cerimonialista
@@ -103,7 +108,8 @@ const Card: React.FC<CardProp> = ({
                 </ul>
             </div>
 
-            {modalEdit && (
+            {/* 🔹 só abre modais se for editável */}
+            {canEdit && modalEdit && (
                 <ModalEdit
                     id={idAcolitos}
                     nome={nome}
@@ -116,7 +122,7 @@ const Card: React.FC<CardProp> = ({
                 />
             )}
 
-            {modalTrash && (
+            {canEdit && modalTrash && (
                 <ModalTrash
                     id={idAcolitos}
                     nome={nome}
