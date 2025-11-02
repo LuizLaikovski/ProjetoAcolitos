@@ -192,7 +192,7 @@ const Form = ({ setAcolitos }: FormProp) => {
         } catch (error) {
             console.error('Erro ao cadastrar acolito:', error);
         } finally {
-            // location.reload();
+            location.reload();
         }
     }
 
