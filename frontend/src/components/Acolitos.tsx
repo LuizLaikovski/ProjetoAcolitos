@@ -4,10 +4,17 @@ import Card from "./Card";
 import Form from "./Form";
 
 const calcularIdade = (dataNascimento: string): number => {
+    if (!dataNascimento) return 0;
+    
     const hoje = new Date();
     const nascimento = new Date(dataNascimento);
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
+
+    if (isNaN(nascimento.getTime())) {
+        console.error("Data de nascimento inválida:", dataNascimento);
+        return 0;
+    }
     
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
     const mesAtual = hoje.getMonth();
     const mesNascimento = nascimento.getMonth();
     

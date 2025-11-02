@@ -50,14 +50,6 @@ const Card: React.FC<CardProp> = ({
                         {idade} anos
                     </p>
 
-                    {cerimonialista ? (
-                        <li className="px-3 w-[13ch] py-1 font-bold text-green-900 rounded-xl bg-green-400">
-                            Cerimonialista
-                        </li>
-                    ) : (
-                        <></>
-                    )}
-
                     <button className="cursor-pointer" onClick={() => setModalEdit(true)}>
                         <FontAwesomeIcon icon={faPencil} color="blue" size="xl" />
                     </button>
@@ -68,6 +60,15 @@ const Card: React.FC<CardProp> = ({
                 </div>
 
                 <ul className="mt-4">
+
+                    {cerimonialista ? (
+                        <li className="px-3 w-[13ch] py-1 font-bold text-green-900 rounded-xl bg-green-400">
+                            Cerimonialista
+                        </li>
+                    ) : (
+                        <></>
+                    )}
+
                     <li className="m-3 text-[14px]">
                         <a
                             className="text-green-500"
