@@ -34,7 +34,6 @@ export default function LoginScreen() {
             >
                 <h1 className="text-3xl mb-10">ACÓLITOS SÃO JOSÉ OPERÁRIO</h1>
 
-                {/* Campo de usuário */}
                 <input
                     value={user}
                     onChange={(e) => setUser(e.target.value)}
@@ -42,8 +41,7 @@ export default function LoginScreen() {
                     className="border-blue-200 bg-blue-50 border-2 p-2 rounded-md w-[20dvw] text-xl text-center"
                 />
 
-                {/* Campo de senha com toggle */}
-                <div className="relative w-[20dvw]">
+                <div className="relative">
                     <input
                         type={showPassword ? "text" : "password"}
                         value={password}
@@ -54,14 +52,13 @@ export default function LoginScreen() {
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        className="absolute right-[-30vw] top-1/4 transform-translate-y-1/2 text-gray-500 hover:text-gray-700"
                         aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                     >
                         <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                     </button>
                 </div>
 
-                {/* Botão de login */}
                 <button
                     type="submit"
                     className="border-black-900 border-2 p-2 rounded-md w-[20dvw] text-2xl transition hover:bg-gray-200"
@@ -69,7 +66,6 @@ export default function LoginScreen() {
                     Entrar
                 </button>
 
-                {/* Link visitante */}
                 <Link to="/visitors" className="text-blue-500 hover:underline">
                     Entrar como visitante
                 </Link>
