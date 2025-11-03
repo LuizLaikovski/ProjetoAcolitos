@@ -41,6 +41,10 @@
         width: 100%;
     }
 
+    .eyesPassword {
+        right: -30vw;
+    }
+
     /* Modal de adicionar acólito */
     .modalAddAcolito {
         width: 95dvw !important;
