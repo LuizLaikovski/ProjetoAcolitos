@@ -40,11 +40,11 @@ const Acolitos = ({canEdit}: AcolitosProps) => {
         const fetchAcolito = async () => {
             try {
                 
-                const token = localStorage.getItem("token");
+                //const token = localStorage.getItem("token");
                 const response = await fetch(`${api_url}`,{
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
+                        // "Authorization": `Bearer ${token}`,
                     }
                 });
                 const data = await response.json();
