@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ErrorPage from './routes/ErrorPage.tsx'
 import LoginScreen from './routes/LoginScreen.tsx'
 import VisitorsPage from './routes/VisitorsPage.tsx'
+import ProtectedRoute from './routes/ProtectedRoute.tsx'
 
 const router = createBrowserRouter([
   {
@@ -14,11 +15,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <App canEdit={true}/>
+    element: (
+      <ProtectedRoute>
+        <App canEdit={true}/>
+      </ProtectedRoute>
+    )
   },
   {
     path: "/visitors",
-    element: <VisitorsPage canEdit={false}/>
+    element: (
+      <ProtectedRoute>
+        <VisitorsPage canEdit={false}/>
+      </ProtectedRoute>
+    )
   },
   {
     path: "*",
