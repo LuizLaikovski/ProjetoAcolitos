@@ -79,8 +79,7 @@ export const usersAcess = async (req, res) => {
         console.log("❌ Senha incorreta");
         return res.status(401).json({ msg: "Senha incorreta" });
       }
-
-      // Gera o token JWT válido por 1 dia
+      
       const token = jwt.sign({ user: usuario.user }, SECRET, { expiresIn: "1d" });
 
       console.log("✅ Login autorizado, token gerado para:", user);
