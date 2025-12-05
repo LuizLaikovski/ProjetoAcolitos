@@ -30,8 +30,6 @@ export const runQuery = (res, query, params = []) => {
       });
     }
 
-    console.log("Executando query:", query);
-    console.log("🔑 Parâmetros:", params);
 
     connection.query(query, params, (err, data) => {
       connection.release();
@@ -44,7 +42,6 @@ export const runQuery = (res, query, params = []) => {
         });
       }
 
-      console.log("✅ Query executada com sucesso. Linhas:", data.length);
       return res.status(200).json(data);
     });
   });
@@ -56,7 +53,6 @@ export const runQuery = (res, query, params = []) => {
 export const usersAcess = async (req, res) => {
   try {
     const { user, password } = req.body;
-    console.log("🔐 Tentativa de login:", { user });
 
     const sql = `SELECT user, password FROM adms WHERE user = ?`;
     db.query(sql, [user], async (err, data) => {
@@ -66,7 +62,6 @@ export const usersAcess = async (req, res) => {
       }
 
       if (data.length === 0) {
-        console.log("❌ Usuário não encontrado");
         return res.status(401).json({ msg: "Usuário não encontrado" });
       }
 
@@ -76,13 +71,11 @@ export const usersAcess = async (req, res) => {
         (await bcrypt.compare(password, usuario.password));
 
       if (!senhaCorreta) {
-        console.log("❌ Senha incorreta");
         return res.status(401).json({ msg: "Senha incorreta" });
       }
       
       const token = jwt.sign({ user: usuario.user }, SECRET, { expiresIn: "1d" });
 
-      console.log("✅ Login autorizado, token gerado para:", user);
       return res.status(200).json({ access: true, token });
     });
   } catch (error) {
@@ -145,7 +138,6 @@ export const getAcolitosSearch = (req, res) => {
   }
 
   sqlComand += ";";
-  console.log("📄 Query final:", sqlComand);
   runQuery(res, sqlComand, params);
 };
 
@@ -271,7 +263,6 @@ export const updateAcolito = (req, res) => {
 export const deleteAcolito = (req, res) => {
   const { id } = req.params;
 
-  console.log("Recebendo DELETE de acolito:", id);
   db.query("DELETE FROM acolitos_comunidades WHERE idAcolito = ?", [id]);
   db.query("DELETE FROM acolitos_missas WHERE idAcolito = ?", [id]);
 
