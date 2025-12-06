@@ -33,31 +33,41 @@ interface AcolitosProps {
 const Acolitos = ({ canEdit }: AcolitosProps) => {
 
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
-    const api_url = import.meta.env.VITE_API_URL; // URL do Apps Script
+    const api_url = import.meta.env.VITE_API_URL as string;
     
     useEffect(() => {
         const fetchAcolito = async () => {
+            if (!api_url) {
+                console.error("VITE_API_URL não configurada. Defina a URL da planilha no .env");
+                return;
+            }
             try {
                 const response = await fetch(api_url);
                 const data = await response.json();
 
                 // 🔥 Ajuste: converter o retorno do Google Sheets para o seu formato
-                const formatado = data.map((item: any, index: number) => ({
-                    idAcolitos: index + 1, // não existe ID na planilha, então geramos 1,2,3...
+                const isYes = (val: any) => {
+                    const s = String(val ?? "").trim().toLowerCase();
+                    return ["sim","ativo","true","1","ok"].includes(s);
+                };
+
+                const formatado = Array.isArray(data) ? data.map((item: any, index: number) => ({
+                    idAcolitos: index + 1,
                     nome: item["Nome Completo"] || "",
                     dataNascimento: item["Data de Nascimento"] || "",
                     idade: calcularIdade(item["Data de Nascimento"]),
-                    telefone: item["Telefone Contato"] || "",
-                    tamTunica: item["Tamanho de túnica"] || "",
-                    comunidades: item["Comunidade"] || "",
-                    cerimonialista: item["Cerimonialista"] || "",
+                    telefone: item["Telefone Contato"] || item["Telefone Contanto"] || "",
+                    tamTunica: item["Tamanho de túnica"] || item["Tamanho de túnica"] || "",
+                    comunidades: [item["Comunidade"] || ""].filter(Boolean),
+                    cerimonialista: isYes(item["Cerimonialista"]),
                     comentario: item["Comentário"] || "",
-                    missas: {
-                        sabado19h30: item["Sábado 19h30"] || "",
-                        domingo8h: item["Domingo 8h"] || "",
-                        domingo18h: item["Domingo 18h"] || ""
-                    }
-                }));
+                    sexo: item["Sexo"] || "",
+                    missas: [
+                        isYes(item["Sábado 19h30"] ?? item["Sabado 19h30"]) ? "Sábado 19h30" : null,
+                        isYes(item["Domingo 8h"]) ? "Domingo 8h" : null,
+                        isYes(item["Domingo 18h"]) ? "Domingo 18h" : null,
+                    ].filter(Boolean) as string[]
+                })) : [];
 
                 setAcolito(formatado);
             } catch (error) {

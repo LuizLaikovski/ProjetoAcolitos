@@ -8,7 +8,7 @@ interface ModalDeleteAcolitoProps {
 }
 
 const ModalTrash: React.FC<ModalDeleteAcolitoProps> = ({ id, nome, setOpen }) => {
-    const api_url = import.meta.env.VITE_API_URL;
+    const api_url = import.meta.env.VITE_API_URL || "http://localhost:8800/";
     const token = localStorage.getItem("token");
 
     const deleteAcolito = async () => {

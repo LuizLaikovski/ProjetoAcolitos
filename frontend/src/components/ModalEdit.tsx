@@ -14,7 +14,7 @@ interface ModalEditAcolitoProps {
 }
 
 const ModalEdit: React.FC<ModalEditAcolitoProps> = ({id,nome,telefone,tamTunica,comentario,setOpen,}) => {
-    const api_url = import.meta.env.VITE_API_URL;
+    const api_url = import.meta.env.VITE_API_URL || "http://localhost:8800/";
     const token = localStorage.getItem("token")
 
     const [formData, setFormData] = useState({

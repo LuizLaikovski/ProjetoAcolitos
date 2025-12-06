@@ -30,7 +30,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
     });
     const [modalOpenNew, setModalOpenNew] = useState(false);
 
-    const api_url = import.meta.env.VITE_API_URL;
+    const api_url = import.meta.env.VITE_API_URL || "http://localhost:8800/";
 
     const openModalNew = () => {
         setModalOpenNew(!modalOpenNew);
