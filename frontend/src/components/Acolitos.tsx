@@ -30,39 +30,48 @@ interface AcolitosProps {
     canEdit: boolean;
 }
 
-const Acolitos = ({canEdit}: AcolitosProps) => {
-    
+const Acolitos = ({ canEdit }: AcolitosProps) => {
 
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
-    const api_url = import.meta.env.VITE_API_URL;
+    const api_url = import.meta.env.VITE_API_URL; // URL do Apps Script
     
     useEffect(() => {
         const fetchAcolito = async () => {
             try {
-                
-                //const token = localStorage.getItem("token");
-                const response = await fetch(`${api_url}`,{
-                    headers: {
-                        "Content-Type": "application/json",
-                        // "Authorization": `Bearer ${token}`,
-                    }
-                });
+                const response = await fetch(api_url);
                 const data = await response.json();
-                const acolitosComIdade = data.map((item: AcolitoProp) => ({
-                    ...item,
-                    idade: item.dataNascimento ? calcularIdade(item.dataNascimento) : 0
+
+                // 🔥 Ajuste: converter o retorno do Google Sheets para o seu formato
+                const formatado = data.map((item: any, index: number) => ({
+                    idAcolitos: index + 1, // não existe ID na planilha, então geramos 1,2,3...
+                    nome: item["Nome Completo"] || "",
+                    dataNascimento: item["Data de Nascimento"] || "",
+                    idade: calcularIdade(item["Data de Nascimento"]),
+                    telefone: item["Telefone Contato"] || "",
+                    tamTunica: item["Tamanho de túnica"] || "",
+                    comunidades: item["Comunidade"] || "",
+                    cerimonialista: item["Cerimonialista"] || "",
+                    comentario: item["Comentário"] || "",
+                    missas: {
+                        sabado19h30: item["Sábado 19h30"] || "",
+                        domingo8h: item["Domingo 8h"] || "",
+                        domingo18h: item["Domingo 18h"] || ""
+                    }
                 }));
-                setAcolito(acolitosComIdade);
+
+                setAcolito(formatado);
             } catch (error) {
                 console.error("Erro ao buscar acólitos:", error);
             }
         };
+
         fetchAcolito();
     }, [api_url]);
 
     return (
         <>
             <Form setAcolitos={setAcolito} canEdit={canEdit} />
+            
             <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8 acolitos">
                 {acolito.length > 0 ? (
                     acolito.map((a) =>
@@ -70,7 +79,7 @@ const Acolitos = ({canEdit}: AcolitosProps) => {
                             key={a.idAcolitos}
                             idAcolitos={a.idAcolitos}
                             nome={a.nome}
-                            sexo={a.sexo}
+                            sexo={a.sexo ?? ""} // caso não exista sexo na planilha
                             idade={a.idade}
                             telefone={a.telefone}
                             tamTunica={a.tamTunica}
