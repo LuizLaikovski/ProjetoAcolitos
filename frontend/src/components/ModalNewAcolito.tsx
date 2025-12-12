@@ -28,7 +28,11 @@ export const ModalNewAcolito = ({ setModal }: propComponent) => {
     const closeModal = () => setModal(false);
 
     const handleChangeNew = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type, checked } = e.target;
+        const target = e.target as HTMLInputElement;
+
+        const { name, value } = target;
+        const checked = target.type === "checkbox" ? target.checked : undefined;
+
 
         setFormData(prev => {
             if (name === "missas" && type === "checkbox") {
@@ -55,7 +59,8 @@ export const ModalNewAcolito = ({ setModal }: propComponent) => {
         mutationFn: newAcolito,
         onSuccess(_, variable) {
             queryClient.setQueryData(["loadAcolitos"], (data) => {
-                return [...(data || []), variable];
+                const prev = Array.isArray(data) ? data : [];
+                return [...prev, variable];
             })
         }
     });
