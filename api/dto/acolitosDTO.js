@@ -71,13 +71,13 @@ export function insertMissas(idAcolito, missas) {
 }
 
 export function updateRelacionamentos(idAcolito, comunidades, missas) {
-    if (Array.isArray(comunidades)) {
+    if (Array.isArray(comunidades) || comunidades != []) {
         db.query("DELETE FROM acolitos_comunidades WHERE idAcolito = ?", [idAcolito], () => {
             insertComunidades(idAcolito, comunidades);
         });
     }
 
-    if (Array.isArray(missas)) {
+    if (Array.isArray(missas) || missas != []) {
         db.query("DELETE FROM acolitos_missas WHERE idAcolito = ?", [idAcolito], () => {
             insertMissas(idAcolito, missas);
         });

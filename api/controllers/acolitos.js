@@ -64,7 +64,7 @@ export const usersAcess = async (req, res) => {
       if (!senhaCorreta) {
         return res.status(401).json({ msg: "Senha incorreta" });
       }
-      
+
       const token = jwt.sign({ user: usuario.user }, SECRET, { expiresIn: "1d" });
 
       return res.status(200).json({ access: true, token });
@@ -127,11 +127,11 @@ export const getAcolitosSearch = (req, res) => {
 };
 
 export const getAcolitos = (_, res) => {
-    runQuery(res, `SELECT * FROM viewAcolitos;`);
+  runQuery(res, `SELECT * FROM viewAcolitos;`);
 };
 
 export const getAcolito = (req, res) => {
-    runQuery(res, `${BASE_QUERY} WHERE a.idAcolitos = ? ${GROUP_ORDER}`, [req.params.id]);
+  runQuery(res, `${BASE_QUERY} WHERE a.idAcolitos = ? ${GROUP_ORDER}`, [req.params.id]);
 };
 
 export const getAcolitosByIdadeMinima = (req, res) => {
@@ -232,7 +232,10 @@ export const updateAcolito = (req, res) => {
     db.query(query, [...values, id]);
   }
 
-  updateRelacionamentos(id, comunidades, missas);
+  if (comunidades.length > 0 || missas.length > 0) {
+    updateRelacionamentos(id, comunidades, missas);
+  }
+  
   return res.status(200).json({ message: "Acólito atualizado com sucesso!" });
 };
 
