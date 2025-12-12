@@ -12,7 +12,7 @@ export default function LoginScreen() {
 
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault();        
         try {
             const res = await fetch(apiUrl, {
                 method: 'POST',
@@ -33,7 +33,7 @@ export default function LoginScreen() {
             }
         } catch (err) {
             console.error(err);
-            alert("Erro ao conectar ao servidor!");
+            alert("Erro ao conectar ao servidorrrrr!");
         }
     };
 

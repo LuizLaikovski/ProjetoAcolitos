@@ -5,20 +5,6 @@ interface AppProps {
   canEdit: boolean;
 }
 
-export interface AcolitoProp {
-    idAcolitos: number;
-    nome: string;
-    sexo: string;
-    dataNascimento: string;
-    idade: number;
-    telefone: string;
-    tamTunica: string;
-    comunidades: string[];
-    missas: string[];
-    cerimonialista: boolean;
-    comentario: string;
-}
-
 function App({canEdit}: AppProps) {
   return (
     <>

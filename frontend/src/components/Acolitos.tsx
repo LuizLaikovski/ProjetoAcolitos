@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { AcolitoProp } from "../App";
 import Card from "./Card";
 import Form from "./Form";
 import {useQuery} from '@tanstack/react-query';
 import { getAcolitos } from "../data/getAcolitos";
+import type { AcolitoProp } from "../interfaces/acolitoInterface";
 
 interface AcolitosProps {
     canEdit: boolean;

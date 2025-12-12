@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import type { AcolitoProp } from "../App";
 import { ModalNewAcolito } from "./ModalNewAcolito";
+import type { AcolitoProp } from "../interfaces/acolitoInterface";
+import { useQuery } from "@tanstack/react-query";
+import getSearchAcolitos from "../data/getAcolitos";
 
 interface FormProp {
     setAcolitos: React.Dispatch<React.SetStateAction<AcolitoProp[]>>;
@@ -8,21 +10,17 @@ interface FormProp {
 }
 
 const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
-    const token = localStorage.getItem("token");
     const api_url = import.meta.env.VITE_API_URL;
     const [formDataSearch, setFormDataSearch] = useState({
         idade: '',
         sexo: '',
         missas: '',
-        comunidade: '',
+        comunidades: '',
         cerimonialista: ''
     });
     const [modalOpenNew, setModalOpenNew] = useState(false);
 
-
-    const openModalNew = () => {
-        setModalOpenNew(!modalOpenNew);
-    }
+    const openModalNew = () => setModalOpenNew(!modalOpenNew);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -38,7 +36,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                 idade: '',
                 sexo: '',
                 missas: '',
-                comunidade: '',
+                comunidades: '',
                 cerimonialista: ''
             });
 
@@ -60,44 +58,20 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
         }
     };
 
+    const { refetch, isError } = useQuery({
+        queryKey: ['/searchAcolitos', formDataSearch],
+        queryFn: () => getSearchAcolitos(formDataSearch),
+        enabled: false
+    });
+
     const handleSubmitSearch = async (e: React.FormEvent) => {
-        try {
-            e.preventDefault();
+        e.preventDefault();
 
-            const dataSearch = {
-                idade: formDataSearch.idade,
-                sexo: formDataSearch.sexo,
-                missas: formDataSearch.missas,
-                comunidades: formDataSearch.comunidade,
-                cerimonialista: formDataSearch.cerimonialista
-            }
+        const response = await refetch();
+        if (response.data) setAcolitos(response.data);
+    }
 
-            const params = new URLSearchParams();
-            if (dataSearch.idade) params.append('idade', dataSearch.idade);
-            if (dataSearch.sexo) params.append('sexo', dataSearch.sexo);
-            if (dataSearch.missas) params.append('missas', dataSearch.missas);
-            if (dataSearch.comunidades) params.append('comunidades', dataSearch.comunidades);
-            if (dataSearch.cerimonialista) params.append('cerimonialista', dataSearch.cerimonialista);
-
-            const response = await fetch(`${api_url}search?${params.toString()}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${token}`
-                },
-            });
-
-
-            if (!response.ok) {
-                throw new Error('Erro na requisição: ' + response.status);
-            }
-
-            const data = await response.json();
-            setAcolitos(data);
-        } catch (error) {
-            console.error('Erro ao procurar acolito:', error);
-        }
-    };
+    if (isError) return <p className="text-red-600">houve um erro: {isError}</p>
 
     return (
         <>
@@ -109,7 +83,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                         <button onClick={openModalNew} className="buttonAdd p-3 rounded-xl w-full xl:w-auto bg-gradient-to-r
                             from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white
                             shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer">
-                                Adicionar Novo Acólito/Ancilia
+                            Adicionar Novo Acólito/Ancilia
                         </button>
                     )}
                 </div>
@@ -133,7 +107,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                             value={formDataSearch.sexo}
                             onChange={handleChange}
                             className="border-purple-300 text-purple-400 bg-purple-100 border-2 rounded-md p-2 w-full">
-                            <option value="" disabled selected>Selecione</option>
+                            <option value="" disabled>Selecione</option>
                             <option value="MAS">Masculino</option>
                             <option value="FEM">Feminino</option>
                         </select>
@@ -146,7 +120,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                             value={formDataSearch.missas}
                             onChange={handleChange}
                             className="border-2 border-yellow-400 bg-yellow-100 text-yellow-500 rounded-md p-2 w-full">
-                            <option value="" disabled selected>Selecione</option>
+                            <option value="" disabled>Selecione</option>
                             <option value="Sabado">Sabádos 19:30</option>
                             <option value="Domingo 8h">Domingos 8h</option>
                             <option value="Domingo 18h">Domingos 18h</option>
@@ -157,12 +131,12 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                     <div>
                         <label htmlFor="comunidade" className="text-red-500">Comunidade:</label>
                         <select
-                            id="comunidade"
-                            name="comunidade"
-                            value={formDataSearch.comunidade}
+                            id="comunidades"
+                            name="comunidades"
+                            value={formDataSearch.comunidades}
                             onChange={handleChange}
                             className="border-red-400 text-red-400 bg-red-100 border-2 rounded-md p-2 w-full">
-                            <option value="" disabled selected>Selecione</option>
+                            <option value="" disabled>Selecione</option>
                             <option value="Matriz">Matriz</option>
                             <option value="São Miguel Arcanjo">São Miguel Arcanjo</option>
                             <option value="Nossa Senhora de Fátima">Nossa Senhora de Fátima</option>
@@ -180,7 +154,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                             value={formDataSearch.cerimonialista}
                             onChange={handleChange}
                             className="border-green-400 text-green-400 bg-green-100 border-2 rounded-md p-2 w-full">
-                            <option value="" disabled selected>Selecione</option>
+                            <option value="" disabled>Selecione</option>
                             <option value="true">Sim</option>
                             <option value="false">Não</option>
                         </select>
@@ -190,7 +164,8 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                         <button
                             id="submit"
                             type="submit"
-                            className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600 transition-colors">
+                            className="cursor-pointer bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-600
+                                transition-colors">
                             Buscar
                         </button>
                     </div>
@@ -198,7 +173,8 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
                         <button
                             type="button"
                             onClick={handleClearFilters}
-                            className="cursor-pointer bg-red-500 text-white rounded-md p-2 w-full hover:bg-red-600 transition-colors">
+                            className="cursor-pointer bg-red-500 text-white rounded-md p-2 w-full hover:bg-red-600
+                                transition-colors">
                             Limpar Filtros
                         </button>
                     </div>
@@ -206,7 +182,7 @@ const Form = ({ setAcolitos, canEdit = true }: FormProp) => {
             </form>
 
 
-            {canEdit && modalOpenNew && 
+            {canEdit && modalOpenNew &&
                 <ModalNewAcolito setModal={setModalOpenNew} />
             }
         </>
