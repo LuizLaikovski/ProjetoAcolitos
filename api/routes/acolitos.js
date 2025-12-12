@@ -16,10 +16,8 @@ import {
 
 const router = express.Router();
 
-// 🔓 Rota pública (login)
 router.post("/login", usersAcess);
 
-// 🔒 A partir daqui, todas as rotas são protegidas
 router.get("/", getAcolitos);
 router.use(verificarToken);
 router.get("/search", getAcolitosSearch);

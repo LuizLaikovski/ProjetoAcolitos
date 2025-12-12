@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -15,13 +14,22 @@ export default function LoginScreen() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post(apiUrl, { user, password });
-            
-            if (res.data.access) {
-                localStorage.setItem("token", res.data.token);
+            const res = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ user, password })
+            });
+
+            const data = await res.json();
+            const token = data.token;
+
+            if (res.ok) {
+                localStorage.setItem("token", token);
                 navigate("/home");
             } else {
-                alert("Usuário ou senha incorretos!");
+                alert(data.msg);
             }
         } catch (err) {
             console.error(err);
