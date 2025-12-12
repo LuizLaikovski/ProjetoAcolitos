@@ -119,6 +119,7 @@ const Card: React.FC<CardProp> = ({
                     comunidades={comunidades}
                     tamTunica={tamTunica}
                     comentario={comentario}
+                    cerimonialista={cerimonialista}
                     setOpen={setModalEdit}
                 />
             )}

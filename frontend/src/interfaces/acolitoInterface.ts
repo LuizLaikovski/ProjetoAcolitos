@@ -19,3 +19,11 @@ export interface AcolitoSearch {
     comunidades: string;
     cerimonialista: string;
 }
+
+export interface updateAcolitoInterface {
+    telefone: string;
+    tamTunica: string;
+    cerimonialista: number;
+    comentario: string;
+    comunidades: number[];
+}
