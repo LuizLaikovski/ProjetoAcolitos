@@ -35,7 +35,7 @@ export const ModalNewAcolito = ({ setModal }: propComponent) => {
 
 
         setFormData(prev => {
-            if (name === "missas" && type === "checkbox") {
+            if (name === "missas" && target.type === "checkbox") {
                 const num = Number(value);
                 const missas = checked
                     ? [...prev.missas, num]
