@@ -17,7 +17,7 @@ interface CardProp {
     missas: string[];
     cerimonialista: boolean;
     comentario: string;
-    canEdit?: boolean; // 🔹 adiciona aqui
+    canEdit?: boolean;
 }
 
 const Card: React.FC<CardProp> = ({
@@ -31,20 +31,21 @@ const Card: React.FC<CardProp> = ({
     missas,
     cerimonialista,
     comentario,
-    canEdit = true // 🔹 padrão: pode editar
+    canEdit = true 
 }) => {
     const [modalEdit, setModalEdit] = useState(false);
     const [modalTrash, setModalTrash] = useState(false);
 
     return (
         <>
-            <div className="box h-auto w-full sm:w-[25dvw] md:w-[30dvw] lg:w-[25dvw] rounded-lg p-5 shadow-2xl bg-white">
+            <div className="box h-auto w-full max-w-[350px] rounded-lg p-5 shadow-2xl bg-white">
                 <div className="flex items-center mb-2">
                     <h2 className="text-2xl font-bold">{nome}</h2>
                 </div>
 
                 <div className="flex items-center mb-4">
-                    <p className={`px-3 py-1 rounded-xl text-white mr-3 ${sexo === "MAS" ? "bg-blue-500" : "bg-pink-500"}`}>
+                    <p className={`px-3 py-1 rounded-xl text-white mr-3 ${sexo === "MAS" ?
+                        "bg-blue-500" : "bg-pink-500"}`}>
                         {sexo}
                     </p>
 
@@ -99,7 +100,8 @@ const Card: React.FC<CardProp> = ({
                     <h2 className="m-3">Disponibilidade: </h2>
                     <div className="flex m-3">{missas}</div>
 
-                    <div className="w-[20dvw] bg-blue-100 opacity-70 ml-[1.5dvw] mt-3 h-[16.5dvh] rounded-2xl p-3 comentario">
+                    <div className="w-[20dvw] bg-blue-100 opacity-70 mt-3 h-[16.5dvh]
+                        rounded-2xl p-3 comentario">
                         <h4 className="text-blue-600">Observações:</h4>
                         <p className="text-[13px] text-blue-600">
                             {comentario || "Nenhuma observação disponível."}
@@ -108,7 +110,6 @@ const Card: React.FC<CardProp> = ({
                 </ul>
             </div>
 
-            {/* 🔹 só abre modais se for editável */}
             {canEdit && modalEdit && (
                 <ModalEdit
                     id={idAcolitos}

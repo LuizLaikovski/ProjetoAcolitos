@@ -12,14 +12,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// ========================================================
-// CONFIG
-// ========================================================
 const SECRET = process.env.SECRET_KEY; // use variável de ambiente em produção
 
-// ========================================================
-// FUNÇÕES GENÉRICAS DE CONSULTA
-// ========================================================
 export const runQuery = (res, query, params = []) => {
   db.getConnection((err, connection) => {
     if (err) {
@@ -47,9 +41,6 @@ export const runQuery = (res, query, params = []) => {
   });
 };
 
-// ========================================================
-// LOGIN (AUTENTICAÇÃO JWT)
-// ========================================================
 export const usersAcess = async (req, res) => {
   try {
     const { user, password } = req.body;
@@ -88,9 +79,6 @@ export const usersAcess = async (req, res) => {
   }
 };
 
-// ========================================================
-// MIDDLEWARE DE VERIFICAÇÃO DE TOKEN
-// ========================================================
 export const verificarToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ msg: "Token ausente" });
@@ -103,9 +91,6 @@ export const verificarToken = (req, res, next) => {
   });
 };
 
-// ========================================================
-// CONSULTAS DE ACÓLITOS
-// ========================================================
 export const getAcolitosSearch = (req, res) => {
   const { idade, sexo, missas, comunidades, cerimonialista } = req.query;
 
@@ -182,9 +167,6 @@ export const getAcolitosCerimonialistas = (_, res) => {
   runQuery(res, `${BASE_QUERY} WHERE a.cerimonialista = 1 ${GROUP_ORDER}`);
 };
 
-// ========================================================
-// INSERIR UM NOVO ACÓLITO
-// ========================================================
 export const setAcolito = (req, res) => {
   const {
     nome,
@@ -221,9 +203,6 @@ export const setAcolito = (req, res) => {
   });
 };
 
-// ========================================================
-// ATUALIZAR UM ACÓLITO
-// ========================================================
 export const updateAcolito = (req, res) => {
   const { id } = req.params;
   const { telefone, tamTunica, cerimonialista, comentario, comunidades, missas } = req.body;
@@ -257,9 +236,6 @@ export const updateAcolito = (req, res) => {
   return res.status(200).json({ message: "Acólito atualizado com sucesso!" });
 };
 
-// ========================================================
-// EXCLUIR UM ACÓLITO
-// ========================================================
 export const deleteAcolito = (req, res) => {
   const { id } = req.params;
 

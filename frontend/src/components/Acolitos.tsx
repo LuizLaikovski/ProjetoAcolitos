@@ -2,70 +2,34 @@ import { useEffect, useState } from "react";
 import type { AcolitoProp } from "../App";
 import Card from "./Card";
 import Form from "./Form";
-
-const calcularIdade = (dataNascimento: string): number => {
-    if (!dataNascimento) return 0;
-    
-    const hoje = new Date();
-    const nascimento = new Date(dataNascimento);
-
-    if (isNaN(nascimento.getTime())) {
-        console.error("Data de nascimento inválida:", dataNascimento);
-        return 0;
-    }
-    
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
-    const mesAtual = hoje.getMonth();
-    const mesNascimento = nascimento.getMonth();
-    
-    if (mesAtual < mesNascimento || 
-        (mesAtual === mesNascimento && hoje.getDate() < nascimento.getDate())) {
-        idade--;
-    }
-    
-    return idade;
-};
+import {useQuery} from '@tanstack/react-query';
+import { getAcolitos } from "../data/getAcolitos";
 
 interface AcolitosProps {
     canEdit: boolean;
 }
 
-const Acolitos = ({canEdit}: AcolitosProps) => {
-    
-
+const Acolitos = ({ canEdit }: AcolitosProps) => {
     const [acolito, setAcolito] = useState<AcolitoProp[]>([]);
-    const api_url = import.meta.env.VITE_API_URL;
-    
+    const {data, isError} = useQuery({
+        queryKey: ["loadAcolitos"],
+        queryFn: getAcolitos
+    });
+
     useEffect(() => {
-        const fetchAcolito = async () => {
-            try {
-                
-                //const token = localStorage.getItem("token");
-                const response = await fetch(`${api_url}`,{
-                    headers: {
-                        "Content-Type": "application/json",
-                        // "Authorization": `Bearer ${token}`,
-                    }
-                });
-                const data = await response.json();
-                const acolitosComIdade = data.map((item: AcolitoProp) => ({
-                    ...item,
-                    idade: item.dataNascimento ? calcularIdade(item.dataNascimento) : 0
-                }));
-                setAcolito(acolitosComIdade);
-            } catch (error) {
-                console.error("Erro ao buscar acólitos:", error);
-            }
-        };
-        fetchAcolito();
-    }, [api_url]);
+        if (data) {
+            setAcolito(data);
+        }
+    }, [data]);
+
+    if (isError) return <p className="text-red-500">houve um erro {isError}</p>
 
     return (
         <>
             <Form setAcolitos={setAcolito} canEdit={canEdit} />
-            <div className="w-[80dvw] grid grid-cols-3 gap-8 mt-8 acolitos">
-                {acolito.length > 0 ? (
-                    acolito.map((a) =>
+            <div className="w-[80dvw] grid gap-8 mt-8 acolitos grid-cols-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
+                {acolito?.length > 0 ? (
+                    acolito?.map((a) =>
                         <Card
                             key={a.idAcolitos}
                             idAcolitos={a.idAcolitos}

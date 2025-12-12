@@ -12,10 +12,9 @@ const ModalTrash: React.FC<ModalDeleteAcolitoProps> = ({ id, nome, setOpen }) =>
     const token = localStorage.getItem("token");
 
     const deleteAcolito = async () => {
-        console.log("Tentando deletar acólito com ID:", id); // 🔍
     
         if (id === undefined || id === null) {
-            console.error("⚠️ ID do acólito não definido!");
+            console.error("ID do acólito não definido!");
             return;
         }
     
@@ -27,12 +26,10 @@ const ModalTrash: React.FC<ModalDeleteAcolitoProps> = ({ id, nome, setOpen }) =>
                 },
             });
             if (!res.ok) throw new Error(`Erro ${res.status}`);
-            console.log("✅ Acólito excluído com sucesso!");
-        } catch (err) {
-            console.error("Erro ao excluir acólito:", err);
-        } finally {
             setOpen(false);
             location.reload();
+        } catch (err) {
+            console.error("Erro ao excluir acólito:", err);
         }
     };
     

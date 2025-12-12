@@ -11,10 +11,12 @@ export default function LoginScreen() {
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_API_URL_LOGIN;
 
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const res = await axios.post(apiUrl, { user, password });
+            
             if (res.data.access) {
                 localStorage.setItem("token", res.data.token);
                 navigate("/home");
